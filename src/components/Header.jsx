@@ -1,12 +1,20 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 import { TransactionContext } from "../context/transactionContext";
-import TransactionModal from "./TransactionModal";
+import AddTransactionModal from "./AddTransactionModal";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { type, setType } = useContext(TransactionContext);
   const path = window.location.pathname;
   const [addTransactionModal, setAddTransactionModal] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!localStorage.getItem("userData")) {
+      navigate("/login");
+    }
+  }, []);
 
   const renderHeaderName = () => {
     switch (path) {
@@ -74,7 +82,7 @@ const Header = () => {
       )}
 
       {addTransactionModal && (
-        <TransactionModal onClose={() => setAddTransactionModal(false)} />
+        <AddTransactionModal onClose={() => setAddTransactionModal(false)} />
       )}
     </header>
   );

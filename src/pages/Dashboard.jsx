@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import useSWR from "swr";
@@ -12,16 +12,27 @@ import dayjs from "dayjs";
 import { MdOutlineModeEdit, MdDeleteOutline } from "react-icons/md";
 import ConfirmModal from "../components/ConfirmModal";
 import { IoWarningOutline, IoClose } from "react-icons/io5";
+import EditTransactionModal from "../components/EditTransactionModal";
+import { TransactionContext } from "../context/transactionContext";
 
 const Dashboard = () => {
-  const [totalTransactions, setTotalTransactions] = useState({
-    credit: 0,
-    debit: 0,
+  const [totalTransactions, setTotalTransactions] = useState([]);
+  const [editTransactionModal, setEditTransactionModal] = useState(false);
+  const { latestTransactions, transactionsLoading } =
+    useContext(TransactionContext);
+  const [editTransactionData, setEditTransactionData] = useState({
+    name: "",
+    type: "",
+    category: "",
+    amount: 0,
+    date: "",
+    id: "",
   });
-  const [transactionId, setTransactionId] = useState(0);
+
+  const [deleteTransactionId, setDeleteTransactionId] = useState(0);
   const [alertModal, setAlertModal] = useState(false);
-  const [transactionsLoading, setTransactionsLoading] = useState([]);
-  const [transactions, setTransactions] = useState([]);
+
+  const userData = JSON.parse(localStorage.getItem("userData"));
 
   const fetchTotals = async (url) => {
     try {
@@ -31,7 +42,7 @@ const Dashboard = () => {
           "x-hasura-admin-secret":
             "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
           "x-hasura-role": "user",
-          "x-hasura-user-id": 1,
+          "x-hasura-user-id": userData.userId,
         },
       });
 
@@ -50,59 +61,128 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      setTotalTransactions({
-        credit: data[0]?.sum,
-        debit: data[1]?.sum,
-      });
+      setTotalTransactions(data);
     }
   }, [isLoading]);
 
-  const fetchTransactions = async () => {
+  // const fetchTransactions = async () => {
+  //   try {
+  //     setTransactionsLoading(true);
+  //     const url =
+  //       "https://bursting-gelding-24.hasura.app/api/rest/all-transactions";
+  //     const res = await axios({
+  //       method: "get",
+  //       baseURL: url,
+  //       params: {
+  //         limit: 1000,
+  //         offset: 0,
+  //       },
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "x-hasura-admin-secret":
+  //           "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
+  //         "x-hasura-role": "user",
+  //         "x-hasura-user-id": userData.userId,
+  //       },
+  //     });
+
+  //     if (res.status === 200) {
+  //       setTransactions(res.data.transactions);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error.message, { duration: 1000 });
+  //   } finally {
+  //     setTransactionsLoading(false);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchTransactions();
+  // }, []);
+
+  const handleTransactionDelete = async () => {
     try {
-      setTransactionsLoading(true);
       const url =
-        "https://bursting-gelding-24.hasura.app/api/rest/all-transactions";
-      const res = await axios({
-        method: "get",
-        baseURL: url,
-        params: {
-          limit: 3,
-          offset: 0,
-        },
+        "https://bursting-gelding-24.hasura.app/api/rest/delete-transaction?id=" +
+        deleteTransactionId;
+
+      const res = await axios.delete(url, {
         headers: {
-          "Content-Type": "application/json",
           "x-hasura-admin-secret":
             "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
           "x-hasura-role": "user",
-          "x-hasura-user-id": 1,
+          "x-hasura-user-id": userData.userId,
         },
       });
 
       if (res.status === 200) {
-        setTransactions(res.data.transactions);
+        toast.success("Transaction deleted");
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.message, { duration: 1000 });
+      toast.error(error.message);
     } finally {
-      setTransactionsLoading(false);
+      setAlertModal(false);
+      setDeleteTransactionId("");
     }
   };
 
-  useEffect(() => {
-    fetchTransactions();
-  }, []);
-
-  const handleTransactionEdit = () => {
-    try {
-    } catch (error) {}
-  };
-
-  const handleTransactionDelete = () => {
-    try {
-      console.log(transactionId);
-    } catch (error) {}
-  };
+  let transactionsData = [];
+  latestTransactions?.forEach(
+    ({ transaction_name, id, category, amount, date, type }) => {
+      transactionsData.push(
+        <li
+          className={`flex items-center gap-2 border-b-2 p-2 text-sm last:border-none`}
+          key={id}
+        >
+          {type === "credit" ? (
+            <IoArrowUpCircleOutline className="text-xl text-green-500" />
+          ) : (
+            <IoArrowDownCircleOutline className="text-xl text-red-500" />
+          )}
+          <p className="flex-grow">{transaction_name}</p>
+          <div className="flex items-start justify-between gap-3 max-w-[500px] w-2/4">
+            <p className="text-slate-400 w-1/4 first-letter:capitalize">
+              {category}
+            </p>
+            <p className="text-slate-400 ">
+              {dayjs(date).format("DD MMM YY, hh:mm A")}
+            </p>
+            <p className="font-semibold">
+              {type === "credit" ? (
+                <span className="text-green-500">+${amount}</span>
+              ) : (
+                <span className="text-red-500">-${amount}</span>
+              )}
+            </p>
+            <button
+              onClick={() => {
+                setEditTransactionData({
+                  category,
+                  amount,
+                  date,
+                  name: transaction_name,
+                  type,
+                  id,
+                });
+                setEditTransactionModal(true);
+              }}
+            >
+              <MdOutlineModeEdit className="text-xl text-blue-400" />
+            </button>
+            <button
+              onClick={() => {
+                setAlertModal(true);
+                setDeleteTransactionId(id);
+              }}
+            >
+              <MdDeleteOutline className="text-xl text-red-400" />
+            </button>
+          </div>
+        </li>
+      );
+    }
+  );
 
   return (
     <div className="min-h-dh w-full p-4 bg-slate-100">
@@ -110,42 +190,39 @@ const Dashboard = () => {
         <p>Loading...</p>
       ) : (
         <div className="flex items-center gap-4 justify-around mx-auto">
-          <div className="flex items-start bg-white rounded-xl p-2 pl-6 justify-between w-2/4 ">
-            <div>
-              <p
-                className="text-3xl font-semibold"
-                style={{ color: "rgba(22, 219, 170, 1)" }}
+          {totalTransactions.map((t, index) => {
+            return (
+              <div
+                key={index}
+                className="flex items-start bg-white rounded-xl p-2 pl-6 justify-between w-2/4 "
               >
-                ${totalTransactions?.credit}
-              </p>
-              <p
-                className="text-sm"
-                style={{ color: "rgba(113, 142, 191, 1)" }}
-              >
-                Credit
-              </p>
-            </div>
+                <div>
+                  <p
+                    className="text-3xl font-semibold"
+                    style={
+                      t.type === "credit"
+                        ? { color: "rgba(22, 219, 170, 1)" }
+                        : { color: "rgba(254, 92, 115, 1)" }
+                    }
+                  >
+                    ${t.sum}
+                  </p>
+                  <p
+                    className="text-sm"
+                    style={{ color: "rgba(113, 142, 191, 1)" }}
+                  >
+                    {t.type}
+                  </p>
+                </div>
 
-            <img className="h-24" src={creditImage} alt="credit" />
-          </div>
-          <div className="flex items-start bg-white rounded-xl p-2 pl-6 justify-between w-2/4">
-            <div>
-              <p
-                className="text-3xl font-semibold"
-                style={{ color: "rgba(254, 92, 115, 1)" }}
-              >
-                ${totalTransactions?.debit}
-              </p>
-              <p
-                className="text-sm"
-                style={{ color: "rgba(113, 142, 191, 1)" }}
-              >
-                Debit
-              </p>
-            </div>
-
-            <img className="h-24" src={debitImage} alt="debit" />
-          </div>
+                {t.type === "credit" ? (
+                  <img className="h-24" src={creditImage} alt="credit" />
+                ) : (
+                  <img className="h-24" src={debitImage} alt="credit" />
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
@@ -159,63 +236,31 @@ const Dashboard = () => {
       {transactionsLoading ? (
         <p>Loading...</p>
       ) : (
-        <ul className="bg-white rounded-xl p-2 px-4 flex flex-col gap-2 mt-2">
-          {transactions?.map((transaction, index) => {
-            const { transaction_name, id, category, amount, date, type } =
-              transaction;
-            return (
-              <li
-                className={`flex items-center gap-2 border-b-2 p-2 text-sm ${
-                  index === transactions.length - 1 ? "border-none" : ""
-                }`}
-                key={id}
-              >
-                {type === "credit" ? (
-                  <IoArrowUpCircleOutline className="text-xl text-green-500" />
-                ) : (
-                  <IoArrowDownCircleOutline className="text-xl text-red-500" />
-                )}
-                <p className="flex-grow">{transaction_name}</p>
-                <div className="flex items-start justify-between gap-3 max-w-[500px] w-2/4">
-                  <p className="text-slate-400">{category}</p>
-                  <p className="text-slate-400">
-                    {dayjs(date).format("YY MMM, hh:mm A")}
-                  </p>
-                  <p className="font-semibold">
-                    {type === "credit" ? (
-                      <span className="text-green-500">+${amount}</span>
-                    ) : (
-                      <span className="text-red-500">-${amount}</span>
-                    )}
-                  </p>
-                  <button onClick={() => handleEdit(id)}>
-                    <MdOutlineModeEdit className="text-xl text-blue-400" />
-                  </button>
-                  <button
-                    onClick={() => {
-                      setAlertModal(true);
-                      setTransactionId(id);
-                    }}
-                  >
-                    <MdDeleteOutline className="text-xl text-red-400" />
-                  </button>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <>
+          {latestTransactions?.length === 0 ? (
+            <p>Empty!!</p>
+          ) : (
+            <ul className="bg-white rounded-xl p-2 px-4 flex flex-col gap-2 mt-2">
+              {transactionsData.map((t) => t)}
+            </ul>
+          )}
+        </>
       )}
+
       {alertModal && (
         <ConfirmModal>
           <button
-            onClick={() => setAlertModal(false)}
+            onClick={() => {
+              setAlertModal(false);
+              setDeleteTransactionId("");
+            }}
             className="absolute right-6 top-4"
           >
             <IoClose className="text-xl text-slate-600" />
           </button>
 
           <div className="flex items-start gap-4">
-            <div className="bg-orange-100 h-[46px] w-[46px] rounded-full flex justify-center items-center">
+            <div className="bg-orange-100 h-[46px] w-[54px] rounded-full flex justify-center items-center">
               <div className="bg-orange-200 h-[36px] w-[36px] rounded-full flex justify-center items-center">
                 <IoWarningOutline className="text-orange-600 text-2xl" />
               </div>
@@ -246,6 +291,23 @@ const Dashboard = () => {
             </div>
           </div>
         </ConfirmModal>
+      )}
+
+      {editTransactionModal && (
+        <EditTransactionModal
+          onClose={() => {
+            setEditTransactionModal(false);
+            setEditTransactionData({
+              name: "",
+              type: "",
+              category: "",
+              amount: 0,
+              date: "",
+              id: "",
+            });
+          }}
+          data={editTransactionData}
+        />
       )}
     </div>
   );
