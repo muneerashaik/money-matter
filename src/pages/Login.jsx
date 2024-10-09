@@ -8,10 +8,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { TailSpin } from "react-loader-spinner";
 import { TransactionContext } from "../context/transactionContext";
+import { UserContext } from "../context/userContext";
 
-const Login = () => {
+const Login = ({ admin }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const { transactionsMutate, setUserId } = useContext(TransactionContext);
+  const { setUserId } = useContext(UserContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -30,11 +31,11 @@ const Login = () => {
 
   const handleValidation = () => {
     const { password, email } = formData;
-    if (password === "") {
-      toast.error("Please enter password!", { duration: 1000 });
-      return false;
-    } else if (email === "") {
+    if (email === "") {
       toast.error("Please enter email !", { duration: 1000 });
+      return false;
+    } else if (password === "") {
+      toast.error("Please enter password!", { duration: 1000 });
       return false;
     }
     return true;
@@ -73,7 +74,7 @@ const Login = () => {
           localStorage.setItem(
             "userData",
             JSON.stringify({
-              admin: false,
+              admin: admin,
               userId: data.get_user_id[0].id,
             })
           );

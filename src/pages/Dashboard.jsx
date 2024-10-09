@@ -1,19 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import useSWR from "swr";
 import creditImage from "../assets/credit.png";
 import debitImage from "../assets/debit.png";
-import {
-  IoArrowDownCircleOutline,
-  IoArrowUpCircleOutline,
-} from "react-icons/io5";
-import dayjs from "dayjs";
-import { MdOutlineModeEdit, MdDeleteOutline } from "react-icons/md";
 import ConfirmModal from "../components/ConfirmModal";
 import { IoWarningOutline, IoClose } from "react-icons/io5";
 import EditTransactionModal from "../components/EditTransactionModal";
 import { TransactionContext } from "../context/transactionContext";
+import TransactionItem from "../components/TransactionItem";
+import { TailSpin } from "react-loader-spinner";
 
 const Dashboard = () => {
   const [editTransactionModal, setEditTransactionModal] = useState(false);
@@ -33,7 +28,7 @@ const Dashboard = () => {
     date: "",
     id: "",
   });
-
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteTransactionId, setDeleteTransactionId] = useState(0);
   const [alertModal, setAlertModal] = useState(false);
 
@@ -41,6 +36,7 @@ const Dashboard = () => {
 
   const handleTransactionDelete = async () => {
     try {
+      setDeleteLoading(true);
       const url =
         "https://bursting-gelding-24.hasura.app/api/rest/delete-transaction?id=" +
         deleteTransactionId;
@@ -62,8 +58,8 @@ const Dashboard = () => {
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setAlertModal(false);
       setDeleteTransactionId("");
+      setDeleteLoading(false);
     }
   };
 
@@ -71,55 +67,21 @@ const Dashboard = () => {
   latestTransactions?.forEach(
     ({ transaction_name, id, category, amount, date, type }) => {
       transactionsData.push(
-        <li
-          className={`flex items-center gap-2 border-b-2 p-2 text-sm last:border-none`}
+        <TransactionItem
           key={id}
-        >
-          {type === "credit" ? (
-            <IoArrowUpCircleOutline className="text-xl text-green-500" />
-          ) : (
-            <IoArrowDownCircleOutline className="text-xl text-red-500" />
-          )}
-          <p className="flex-grow">{transaction_name}</p>
-          <div className="flex items-start justify-between gap-3 max-w-[500px] w-2/4">
-            <p className="text-slate-400 w-1/4 first-letter:capitalize">
-              {category}
-            </p>
-            <p className="text-slate-400 ">
-              {dayjs(date).format("DD MMM YY, hh:mm A")}
-            </p>
-            <p className="font-semibold">
-              {type === "credit" ? (
-                <span className="text-green-500">+${amount}</span>
-              ) : (
-                <span className="text-red-500">-${amount}</span>
-              )}
-            </p>
-            <button
-              onClick={() => {
-                setEditTransactionData({
-                  category,
-                  amount,
-                  date,
-                  name: transaction_name,
-                  type,
-                  id,
-                });
-                setEditTransactionModal(true);
-              }}
-            >
-              <MdOutlineModeEdit className="text-xl text-blue-400" />
-            </button>
-            <button
-              onClick={() => {
-                setAlertModal(true);
-                setDeleteTransactionId(id);
-              }}
-            >
-              <MdDeleteOutline className="text-xl text-red-400" />
-            </button>
-          </div>
-        </li>
+          data={{
+            transaction_name,
+            id,
+            category,
+            amount,
+            date,
+            type,
+          }}
+          setEditTransactionData={setEditTransactionData}
+          setEditTransactionModal={setEditTransactionModal}
+          setAlertModal={setAlertModal}
+          setDeleteTransactionId={setDeleteTransactionId}
+        />
       );
     }
   );
@@ -217,13 +179,26 @@ const Dashboard = () => {
               <div className="flex items-center gap-4 mt-4 text-sm">
                 <button
                   onClick={handleTransactionDelete}
-                  className="bg-red-600 text-white rounded-xl py-2 px-4"
+                  className="bg-red-600 text-white rounded-xl py-2  w-[120px] flex items-center justify-center"
                 >
-                  Yes, Delete
+                  {deleteLoading ? (
+                    <TailSpin
+                      visible={true}
+                      height="20"
+                      width="20"
+                      color="white"
+                      ariaLabel="tail-spin-loading"
+                      radius="1"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                    />
+                  ) : (
+                    <p className="text-sm">Yes, Delete</p>
+                  )}
                 </button>
                 <button
                   onClick={() => setAlertModal(false)}
-                  className="border-slate-200 border-2 text-black rounded-xl py-2 px-4"
+                  className="border-slate-200 border-2 w-[120px] text-black rounded-xl py-2 px-4"
                 >
                   No, Leave it
                 </button>

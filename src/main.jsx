@@ -4,11 +4,14 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import { TransactionContextProvider } from "./context/transactionContext.jsx";
+import { UserContextProvider } from "./context/userContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <TransactionContextProvider>
-      <App />
-    </TransactionContextProvider>
+    <UserContextProvider>
+      <TransactionContextProvider>
+        <App />
+      </TransactionContextProvider>
+    </UserContextProvider>
   </BrowserRouter>
 );

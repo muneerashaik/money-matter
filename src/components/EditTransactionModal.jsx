@@ -29,45 +29,69 @@ const EditTransactionModal = ({ onClose, data }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const transactionValidation = () => {
+    const { name, category, date, type, amount } = formData;
+    if (name === "") {
+      toast.error("Please enter name");
+      return false;
+    } else if (category === "") {
+      toast.error("Please enter category");
+      return false;
+    } else if (date === "") {
+      toast.error("Please enter date");
+      return false;
+    } else if (type === "") {
+      toast.error("Please enter type");
+      return false;
+    } else if (amount === "") {
+      toast.error("Please enter amount");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleEditTransaction = async (e) => {
     try {
       e.preventDefault();
-      const { name, category, date, type, amount, id } = formData;
-      const url =
-        "https://bursting-gelding-24.hasura.app/api/rest/update-transaction";
+      if (transactionValidation()) {
+        const { name, category, date, type, amount, id } = formData;
+        const url =
+          "https://bursting-gelding-24.hasura.app/api/rest/update-transaction";
 
-      const res = await axios.post(
-        url,
-        {
-          name,
-          category,
-          date,
-          type,
-          amount,
-          id,
-        },
-        {
-          headers: {
-            "x-hasura-admin-secret":
-              "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
-            "x-hasura-role": "user",
-            "x-hasura-user-id": userData.userId,
+        const res = await axios.post(
+          url,
+          {
+            name,
+            category,
+            date,
+            type,
+            amount,
+            id,
           },
-        }
-      );
+          {
+            headers: {
+              "x-hasura-admin-secret":
+                "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
+              "x-hasura-role": "user",
+              "x-hasura-user-id": userData.userId,
+            },
+          }
+        );
 
-      if (res.status === 200) {
-        toast.success("Transaction Updated");
-        transactionsMutate();
-        totalTransactionsMutate();
-        setFormData({
-          name: "",
-          type: "",
-          category: "",
-          amount: 0,
-          date: "",
-        });
-        onClose();
+        if (res.status === 200) {
+          toast.success("Transaction Updated");
+          transactionsMutate();
+          totalTransactionsMutate();
+          setFormData({
+            name: "",
+            type: "",
+            category: "",
+            amount: 0,
+            date: "",
+          });
+          onClose();
+        }
       }
     } catch (error) {
       toast.error(error.message);

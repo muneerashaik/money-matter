@@ -1,27 +1,24 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 import useSWR from "swr";
+import { UserContext } from "./userContext";
 
 export const TransactionContext = createContext();
 
 export const TransactionContextProvider = ({ children }) => {
   const [type, setType] = useState("transactions");
-  const [userId, setUserId] = useState(0);
-  const userData = JSON.parse(localStorage.getItem("userData"));
-
-  useEffect(() => {
-    setUserId(userData.userId);
-  }, []);
+  const { userId } = useContext(UserContext);
 
   const transactionsFetcher = async (url) => {
     try {
-      if (localStorage.getItem("userData")) {
+      if (userId) {
         const res = await axios({
           method: "get",
           baseURL: url,
           params: {
-            limit: 1000,
+            limit: 100,
             offset: 0,
           },
           headers: {
@@ -52,18 +49,19 @@ export const TransactionContextProvider = ({ children }) => {
 
   const fetchTotals = async (url) => {
     try {
-      const res = await axios.get(url, {
-        headers: {
-          "Content-Type": "application/json",
-          "x-hasura-admin-secret":
-            "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
-          "x-hasura-role": "user",
-          "x-hasura-user-id": userId,
-        },
-      });
-
-      if (res.status === 200) {
-        return res.data.totals_credit_debit_transactions;
+      if (userId) {
+        const res = await axios.get(url, {
+          headers: {
+            "Content-Type": "application/json",
+            "x-hasura-admin-secret":
+              "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
+            "x-hasura-role": "user",
+            "x-hasura-user-id": userId,
+          },
+        });
+        if (res.status === 200) {
+          return res.data.totals_credit_debit_transactions;
+        }
       }
     } catch (error) {
       toast.error(error.message);
@@ -101,7 +99,6 @@ export const TransactionContextProvider = ({ children }) => {
         transactionsLoading,
         transactions,
         transactionsMutate,
-        setUserId,
         totalTransactionsData,
         totalTransactionsLoading,
         totalTransactionsMutate,

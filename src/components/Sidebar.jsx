@@ -87,7 +87,7 @@ const Sidebar = () => {
           )}
           <TbReceiptDollar className="text-xl" />
           <p className="text-base font-medium">
-            {user.admin ? "All Transactions" : "Transactions"}
+            {user?.admin ? "All Transactions" : "Transactions"}
           </p>
         </li>
       </ul>

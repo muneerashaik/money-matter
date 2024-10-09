@@ -6,16 +6,13 @@ import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
-import AdminLogin from "./pages/AdminLogin";
 
 const App = () => {
-  const navigate = useNavigate();
-
   return (
     <>
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/login" element={<Login admin={false} />} />
+        <Route path="/admin/login" element={<Login admin={true} />} />
 
         <Route
           path="/"
