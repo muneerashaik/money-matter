@@ -28,6 +28,7 @@ const Dashboard = () => {
     date: "",
     id: "",
   });
+
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [deleteTransactionId, setDeleteTransactionId] = useState(0);
   const [alertModal, setAlertModal] = useState(false);

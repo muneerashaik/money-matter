@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { TransactionContext } from "../context/transactionContext";
+import { TailSpin } from "react-loader-spinner";
 
 const EditTransactionModal = ({ onClose, data }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ const EditTransactionModal = ({ onClose, data }) => {
     date: "",
     id: "",
   });
+  const [editLoading, setEditLoading] = useState(false);
   const { transactionsMutate, totalTransactionsMutate } =
     useContext(TransactionContext);
   const userData = JSON.parse(localStorage.getItem("userData"));
@@ -53,6 +55,7 @@ const EditTransactionModal = ({ onClose, data }) => {
 
   const handleEditTransaction = async (e) => {
     try {
+      setEditLoading(true);
       e.preventDefault();
       if (transactionValidation()) {
         const { name, category, date, type, amount, id } = formData;
@@ -95,6 +98,8 @@ const EditTransactionModal = ({ onClose, data }) => {
       }
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setEditLoading(false);
     }
   };
 
@@ -194,9 +199,22 @@ const EditTransactionModal = ({ onClose, data }) => {
           </div>
           <button
             type="submit"
-            className="rounded-lg text-white py-2 px-4 bg-blue-600 text-sm"
+            className="flex justify-center items-center mt-5  bg-blue-500 text-white font-medium text-sm rounded-lg h-12 w-full "
           >
-            Edit Transaction
+            {editLoading ? (
+              <TailSpin
+                visible={true}
+                height="30"
+                width="30"
+                color="white"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+                wrapperStyle={{}}
+                wrapperClass=""
+              />
+            ) : (
+              "Edit Transaction"
+            )}
           </button>
         </form>
       </div>

@@ -9,9 +9,7 @@ import { UserContextProvider } from "./context/userContext.jsx";
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
     <UserContextProvider>
-      <TransactionContextProvider>
-        <App />
-      </TransactionContextProvider>
+      <App />
     </UserContextProvider>
   </BrowserRouter>
 );
