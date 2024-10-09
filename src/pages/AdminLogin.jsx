@@ -1,11 +1,12 @@
 import { IoMdMail } from "react-icons/io";
 import { RiLock2Line } from "react-icons/ri";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
+import { TransactionContext } from "../context/transactionContext";
 
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,9 +14,15 @@ const AdminLogin = () => {
     email: "",
     password: "",
   });
+  const { transactionsMutate, setUserId } = useContext(TransactionContext);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  useEffect(() => {
+    if (localStorage.getItem("userData")) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -60,6 +67,7 @@ const AdminLogin = () => {
         const { data } = response;
 
         if (response.status === 200) {
+          transactionsMutate();
           setFormData({
             password: "",
             email: "",
@@ -72,7 +80,7 @@ const AdminLogin = () => {
             })
           );
           toast.success("Login successful", { duration: 1000 });
-
+          setUserId(data.get_user_id[0].id);
           setTimeout(() => {
             navigate("/dashboard");
           }, 1000);

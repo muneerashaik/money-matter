@@ -1,22 +1,28 @@
 import { IoMdMail } from "react-icons/io";
 import { RiLock2Line } from "react-icons/ri";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { TailSpin } from "react-loader-spinner";
+import { TransactionContext } from "../context/transactionContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { transactionsMutate, setUserId } = useContext(TransactionContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
+  useEffect(() => {
+    if (localStorage.getItem("userData")) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -71,6 +77,7 @@ const Login = () => {
               userId: data.get_user_id[0].id,
             })
           );
+          setUserId(data.get_user_id[0].id);
           toast.success("Login successful", { duration: 1000 });
 
           setTimeout(() => {

@@ -16,10 +16,15 @@ import EditTransactionModal from "../components/EditTransactionModal";
 import { TransactionContext } from "../context/transactionContext";
 
 const Dashboard = () => {
-  const [totalTransactions, setTotalTransactions] = useState([]);
   const [editTransactionModal, setEditTransactionModal] = useState(false);
-  const { latestTransactions, transactionsLoading } =
-    useContext(TransactionContext);
+  const {
+    latestTransactions,
+    transactionsLoading,
+    transactionsMutate,
+    totalTransactionsData,
+    totalTransactionsLoading,
+    totalTransactionsMutate,
+  } = useContext(TransactionContext);
   const [editTransactionData, setEditTransactionData] = useState({
     name: "",
     type: "",
@@ -33,73 +38,6 @@ const Dashboard = () => {
   const [alertModal, setAlertModal] = useState(false);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
-
-  const fetchTotals = async (url) => {
-    try {
-      const res = await axios.get(url, {
-        headers: {
-          "Content-Type": "application/json",
-          "x-hasura-admin-secret":
-            "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
-          "x-hasura-role": "user",
-          "x-hasura-user-id": userData.userId,
-        },
-      });
-
-      if (res.status === 200) {
-        return res.data.totals_credit_debit_transactions;
-      }
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
-
-  const { data, isLoading, error } = useSWR(
-    "https://bursting-gelding-24.hasura.app/api/rest/credit-debit-totals",
-    fetchTotals
-  );
-
-  useEffect(() => {
-    if (!isLoading) {
-      setTotalTransactions(data);
-    }
-  }, [isLoading]);
-
-  // const fetchTransactions = async () => {
-  //   try {
-  //     setTransactionsLoading(true);
-  //     const url =
-  //       "https://bursting-gelding-24.hasura.app/api/rest/all-transactions";
-  //     const res = await axios({
-  //       method: "get",
-  //       baseURL: url,
-  //       params: {
-  //         limit: 1000,
-  //         offset: 0,
-  //       },
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "x-hasura-admin-secret":
-  //           "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
-  //         "x-hasura-role": "user",
-  //         "x-hasura-user-id": userData.userId,
-  //       },
-  //     });
-
-  //     if (res.status === 200) {
-  //       setTransactions(res.data.transactions);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error(error.message, { duration: 1000 });
-  //   } finally {
-  //     setTransactionsLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchTransactions();
-  // }, []);
 
   const handleTransactionDelete = async () => {
     try {
@@ -118,6 +56,8 @@ const Dashboard = () => {
 
       if (res.status === 200) {
         toast.success("Transaction deleted");
+        transactionsMutate();
+        totalTransactionsMutate();
       }
     } catch (error) {
       toast.error(error.message);
@@ -186,11 +126,11 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-dh w-full p-4 bg-slate-100">
-      {isLoading ? (
+      {totalTransactionsLoading ? (
         <p>Loading...</p>
       ) : (
         <div className="flex items-center gap-4 justify-around mx-auto">
-          {totalTransactions.map((t, index) => {
+          {totalTransactionsData?.map((t, index) => {
             return (
               <div
                 key={index}

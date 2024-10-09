@@ -1,8 +1,9 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
+import { TransactionContext } from "../context/transactionContext";
 
 const AddTransactionModal = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ const AddTransactionModal = ({ onClose }) => {
     amount: 0,
     date: "",
   });
+  const { totalTransactionsMutate, transactionsMutate } =
+    useContext(TransactionContext);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -46,6 +49,8 @@ const AddTransactionModal = ({ onClose }) => {
 
       if (res.status === 200) {
         toast.success("Transaction Added");
+        transactionsMutate();
+        totalTransactionsMutate();
         setFormData({
           name: "",
           type: "",

@@ -20,6 +20,7 @@ const Transactions = () => {
     type: tabType,
     transactions,
     transactionsLoading,
+    transactionsMutate,
   } = useContext(TransactionContext);
   const [editTransactionModal, setEditTransactionModal] = useState(false);
   const [editTransactionData, setEditTransactionData] = useState({
@@ -49,6 +50,7 @@ const Transactions = () => {
 
       if (res.status === 200) {
         toast.success("Transaction deleted");
+        transactionsMutate();
       }
     } catch (error) {
       toast.error(error.message);

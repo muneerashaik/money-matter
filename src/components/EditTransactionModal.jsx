@@ -1,9 +1,10 @@
 import axios from "axios";
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
+import { TransactionContext } from "../context/transactionContext";
 
 const EditTransactionModal = ({ onClose, data }) => {
   const [formData, setFormData] = useState({
@@ -14,6 +15,8 @@ const EditTransactionModal = ({ onClose, data }) => {
     date: "",
     id: "",
   });
+  const { transactionsMutate, totalTransactionsMutate } =
+    useContext(TransactionContext);
   const userData = JSON.parse(localStorage.getItem("userData"));
   useEffect(() => {
     setFormData({
@@ -55,6 +58,8 @@ const EditTransactionModal = ({ onClose, data }) => {
 
       if (res.status === 200) {
         toast.success("Transaction Updated");
+        transactionsMutate();
+        totalTransactionsMutate();
         setFormData({
           name: "",
           type: "",
