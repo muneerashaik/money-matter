@@ -26,6 +26,7 @@ const Transactions = () => {
     transactionsMutate,
     totalTransactionsMutate,
   } = useContext(TransactionContext);
+
   const [editTransactionModal, setEditTransactionModal] = useState(false);
   const [editTransactionData, setEditTransactionData] = useState({
     name: "",
