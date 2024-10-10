@@ -7,15 +7,15 @@ import { LuLogOut } from "react-icons/lu";
 import { IoClose } from "react-icons/io5";
 import toast from "react-hot-toast";
 import SidebarOption from "./SidebarOption";
+import ConfirmModal from "./ConfirmModal";
 
 const Sidebar = () => {
   const [alertModal, setAlertModal] = useState(false);
-  const path = window.location.pathname;
-  const navigate = useNavigate();
-
   const [userData, setUserData] = useState({});
+  const [logoutLoading, setLogoutLoading] = useState(false);
 
-  const user = JSON.parse(localStorage.getItem("userData"));
+  const navigate = useNavigate();
+  const { userId } = JSON.parse(localStorage.getItem("userData"));
 
   const fetchUserProfile = async () => {
     try {
@@ -25,7 +25,7 @@ const Sidebar = () => {
           "x-hasura-admin-secret":
             "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
           "x-hasura-role": "user",
-          "x-hasura-user-id": user.userId,
+          "x-hasura-user-id": userId,
         },
       });
 
@@ -40,6 +40,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     try {
+      setLogoutLoading(true);
       localStorage.removeItem("userData");
       toast.success("Logout successful", { duration: 1000 });
       setTimeout(() => {
@@ -47,6 +48,8 @@ const Sidebar = () => {
       }, 1000);
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setLogoutLoading(false);
     }
   };
 
@@ -75,13 +78,13 @@ const Sidebar = () => {
 
         <div className="flex flex-col flex-grow text-xs">
           <p className="font-medium" style={{ color: "rgba(80, 88, 135, 1)" }}>
-            {userData.name}
+            {userData?.name}
           </p>
           <p
             className="font-medium"
             style={{ color: "rgba(113, 142, 191, 1)" }}
           >
-            {userData.email}
+            {userData?.email}
           </p>
         </div>
 
@@ -92,53 +95,12 @@ const Sidebar = () => {
         />
       </div>
       {alertModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-          <div className="relative flex w-[440px] flex-col justify-center rounded-xl bg-white px-4 py-6">
-            <button
-              onClick={() => setAlertModal(false)}
-              className="absolute right-6 top-4"
-            >
-              <IoClose className="text-xl text-slate-600" />
-            </button>
-
-            <div className="flex items-start gap-4">
-              <div className="bg-orange-100 h-[46px] w-[46px] rounded-full flex justify-center items-center">
-                <div className="bg-orange-200 h-[36px] w-[36px] rounded-full flex justify-center items-center">
-                  <LuLogOut className="text-orange-600 text-2xl" />
-                </div>
-              </div>
-
-              <div className="flex flex-col mt-[-4px]">
-                <p
-                  style={{ color: "rgba(51, 59, 105, 1)" }}
-                  className="font-semibold text-lg"
-                >
-                  Are you sure you want to Logout?
-                </p>
-                <p
-                  style={{ color: "rgba(80, 88, 135, 1)" }}
-                  className="text-slate-500 text-xs mt-1"
-                >
-                  You will be logged out immediately.
-                </p>
-                <div className="flex items-center gap-4 mt-4 text-sm">
-                  <button
-                    onClick={handleLogout}
-                    className="bg-red-600 text-white rounded-xl py-2 px-4"
-                  >
-                    Yes, Logout
-                  </button>
-                  <button
-                    onClick={() => setAlertModal(false)}
-                    className="border-slate-200 border-2 text-black rounded-xl py-2 px-4"
-                  >
-                    No, Leave it
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ConfirmModal
+          toggleModal={() => setAlertModal(false)}
+          actionLoading={logoutLoading}
+          action="logout"
+          actionHandler={handleLogout}
+        />
       )}
     </div>
   );

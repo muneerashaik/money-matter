@@ -110,7 +110,7 @@ const Login = ({ admin }) => {
           style={{ color: "rgba(80, 88, 135, 1)" }}
           className=" font-medium text-xl mb-3 text-center"
         >
-          Login
+          {admin && "Admin "}Login
         </h1>
         <label
           style={{ color: "rgba(80, 88, 135, 1)" }}

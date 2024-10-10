@@ -1,13 +1,13 @@
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { TransactionContext } from "../context/transactionContext";
-import { TailSpin } from "react-loader-spinner";
 import LoadingButton from "./LoadingButton";
 
 const AddTransactionModal = ({ onClose }) => {
+  const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     type: "",
@@ -18,10 +18,14 @@ const AddTransactionModal = ({ onClose }) => {
   const [addLoading, setAddLoading] = useState(false);
   const { totalTransactionsMutate, transactionsMutate } =
     useContext(TransactionContext);
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const { userId } = JSON.parse(localStorage.getItem("userData"));
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  useEffect(() => {
+    setIsVisible(true); // Trigger the animation when modal is mounted
+  }, []);
 
   const transactionValidation = () => {
     const { name, category, date, type, amount } = formData;
@@ -62,14 +66,14 @@ const AddTransactionModal = ({ onClose }) => {
             date,
             type,
             amount,
-            user_id: userData.userId,
+            user_id: userId,
           },
           {
             headers: {
               "x-hasura-admin-secret":
                 "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
               "x-hasura-role": "user",
-              "x-hasura-user-id": userData.userId,
+              "x-hasura-user-id": userId,
             },
           }
         );
@@ -95,11 +99,26 @@ const AddTransactionModal = ({ onClose }) => {
     }
   };
 
+  const handleCloseModal = () => {
+    setIsVisible(false);
+    setTimeout(() => {
+      onClose(); // Close the modal after the animation
+    }, 300); // Match the animation duration
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <div className="relative flex  w-[400px] flex-col justify-center rounded-xl bg-white px-4 py-6">
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300 ${
+        isVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      <div
+        className={`relative flex  w-[400px] flex-col justify-center rounded-xl bg-white px-4 py-6 transform transition-transform duration-300 ${
+          isVisible ? "scale-100" : "scale-90"
+        }`}
+      >
         <h1 className="text-xl font-semibold">Add Transaction</h1>
-        <button onClick={onClose} className="absolute right-6 top-4">
+        <button onClick={handleCloseModal} className="absolute right-6 top-4">
           <IoClose className="text-xl text-slate-600" />
         </button>
 

@@ -7,6 +7,8 @@ import ConfirmModal from "../components/ConfirmModal";
 import EditTransactionModal from "../components/EditTransactionModal";
 import { TransactionContext } from "../context/transactionContext";
 import TransactionItem from "../components/TransactionItem";
+import Loader from "../components/Loader";
+import EmptyView from "../components/EmptyView";
 
 const Dashboard = () => {
   const [editTransactionModal, setEditTransactionModal] = useState(false);
@@ -59,6 +61,9 @@ const Dashboard = () => {
     } finally {
       setDeleteTransactionId("");
       setDeleteLoading(false);
+      setTimeout(() => {
+        setAlertModal(false);
+      }, 1000);
     }
   };
 
@@ -88,7 +93,9 @@ const Dashboard = () => {
   return (
     <div className="min-h-dh w-full p-4 bg-slate-100">
       {totalTransactionsLoading ? (
-        <p>Loading...</p>
+        <div className="flex items-center justify-center h-[100px]">
+          <Loader />
+        </div>
       ) : (
         <div className="flex items-center gap-4 justify-around mx-auto">
           {totalTransactionsData?.map((t, index) => {
@@ -131,15 +138,17 @@ const Dashboard = () => {
         className="font-semibold mt-4"
         style={{ color: "rgba(51, 59, 105, 1)" }}
       >
-        Last Transaction
+        Last Transactions
       </h1>
 
       {transactionsLoading ? (
-        <p>Loading...</p>
+        <div className="flex items-center justify-center h-[60dvh]">
+          <Loader />
+        </div>
       ) : (
         <>
-          {latestTransactions?.length === 0 ? (
-            <p>Empty!!</p>
+          {transactionsLoading === false && latestTransactions?.length === 0 ? (
+            <EmptyView />
           ) : (
             <ul className="bg-white rounded-xl p-2 px-4 flex flex-col gap-2 mt-2">
               {transactionsData.map((t) => t)}

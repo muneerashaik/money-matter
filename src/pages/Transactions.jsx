@@ -5,6 +5,8 @@ import ConfirmModal from "../components/ConfirmModal";
 import EditTransactionModal from "../components/EditTransactionModal";
 import toast from "react-hot-toast";
 import TransactionItem from "../components/TransactionItem";
+import Loader from "../components/Loader";
+import EmptyView from "../components/EmptyView";
 
 const Transactions = () => {
   const [deleteTransactionId, setDeleteTransactionId] = useState("");
@@ -55,6 +57,9 @@ const Transactions = () => {
     } finally {
       setDeleteLoading(false);
       setDeleteTransactionId("");
+      setTimeout(() => {
+        setAlertModal(false);
+      }, 1000);
     }
   };
 
@@ -88,11 +93,13 @@ const Transactions = () => {
     return (
       <>
         {transactionsLoading ? (
-          <p>loading...</p>
+          <div className="flex items-center justify-center h-[60dvh]">
+            <Loader />
+          </div>
         ) : (
           <>
             {transactionsData?.length === 0 ? (
-              <p>Empty!!</p>
+              <EmptyView />
             ) : (
               <ul className="bg-white rounded-xl p-2 px-4 flex flex-col gap-2 mt-2">
                 {transactionsData.map((t) => t)}

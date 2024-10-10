@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoClose, IoWarningOutline } from "react-icons/io5";
 import { TailSpin } from "react-loader-spinner";
 
@@ -8,11 +8,26 @@ const ConfirmModal = ({
   action,
   actionHandler,
 }) => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    setIsVisible(true); // Trigger the animation when modal is mounted
+  }, []);
+
   const renderActionHeading = () => {
     if (action === "delete") {
       return (
         <p className="font-semibold text-lg">
           Are you sure you want to delete?
+        </p>
+      );
+    } else if (action === "logout") {
+      return (
+        <p
+          style={{ color: "rgba(51, 59, 105, 1)" }}
+          className="font-semibold text-lg"
+        >
+          Are you sure you want to Logout?
         </p>
       );
     }
@@ -26,18 +41,45 @@ const ConfirmModal = ({
           action.
         </p>
       );
+    } else if (action === "logout") {
+      return (
+        <p
+          style={{ color: "rgba(80, 88, 135, 1)" }}
+          className="text-slate-500 text-xs mt-1"
+        >
+          You will be logged out immediately.
+        </p>
+      );
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsVisible(false);
+    setTimeout(() => {
+      toggleModal(); // Close the modal after the animation
+    }, 300); // Match the animation duration
+  };
+
+  const buttonText = () => {
+    if (action === "delete") {
+      return "Yes, Delete";
+    } else if (action === "logout") {
+      return "Yes, Logout";
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <div className="relative flex w-[440px] flex-col justify-center rounded-xl bg-white px-4 py-6">
-        <button
-          onClick={() => {
-            toggleModal();
-          }}
-          className="absolute right-6 top-4"
-        >
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center  bg-black bg-opacity-60 transition-opacity duration-300 ${
+        isVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      <div
+        className={`relative flex w-[440px] flex-col justify-center rounded-xl bg-white px-4 py-6 transform transition-transform duration-300 ${
+          isVisible ? "scale-100" : "scale-90"
+        }`}
+      >
+        <button onClick={handleCloseModal} className="absolute right-6 top-4">
           <IoClose className="text-xl text-slate-600" />
         </button>
 
@@ -54,7 +96,7 @@ const ConfirmModal = ({
             <div className="flex items-center gap-4 mt-4 text-sm">
               <button
                 onClick={actionHandler}
-                className="bg-red-600 text-white rounded-xl py-2  w-[120px] flex items-center justify-center"
+                className="bg-red-600 text-white rounded-xl py-2 w-[120px] flex items-center justify-center"
               >
                 {actionLoading ? (
                   <TailSpin
@@ -68,12 +110,12 @@ const ConfirmModal = ({
                     wrapperClass=""
                   />
                 ) : (
-                  <p className="text-sm">Yes, Delete</p>
+                  <p className="text-sm">{buttonText()}</p>
                 )}
               </button>
               <button
-                onClick={() => toggleModal()}
-                className="border-slate-200 border-2  w-[120px] text-black rounded-xl py-2"
+                onClick={handleCloseModal}
+                className="border-slate-200 border-2 w-[120px] text-black rounded-xl py-2"
               >
                 No, Leave it
               </button>

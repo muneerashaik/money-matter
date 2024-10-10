@@ -5,10 +5,10 @@ import toast from "react-hot-toast";
 import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { TransactionContext } from "../context/transactionContext";
-import { TailSpin } from "react-loader-spinner";
 import LoadingButton from "./LoadingButton";
 
 const EditTransactionModal = ({ onClose, data }) => {
+  const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     type: "",
@@ -20,7 +20,12 @@ const EditTransactionModal = ({ onClose, data }) => {
   const [editLoading, setEditLoading] = useState(false);
   const { transactionsMutate, totalTransactionsMutate } =
     useContext(TransactionContext);
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const { userId } = JSON.parse(localStorage.getItem("userData"));
+
+  useEffect(() => {
+    setIsVisible(true); // Trigger the animation when modal is mounted
+  }, []);
+
   useEffect(() => {
     setFormData({
       ...data,
@@ -78,7 +83,7 @@ const EditTransactionModal = ({ onClose, data }) => {
               "x-hasura-admin-secret":
                 "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
               "x-hasura-role": "user",
-              "x-hasura-user-id": userData.userId,
+              "x-hasura-user-id": userId,
             },
           }
         );
@@ -104,11 +109,26 @@ const EditTransactionModal = ({ onClose, data }) => {
     }
   };
 
+  const handleCloseModal = () => {
+    setIsVisible(false);
+    setTimeout(() => {
+      onClose(); // Close the modal after the animation
+    }, 300); // Match the animation duration
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <div className="relative flex  w-[400px] flex-col justify-center rounded-xl bg-white px-4 py-6">
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300 ${
+        isVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      <div
+        className={`relative flex  w-[400px] flex-col justify-center rounded-xl bg-white px-4 py-6 transform transition-transform duration-300 ${
+          isVisible ? "scale-100" : "scale-90"
+        }`}
+      >
         <h1 className="text-xl font-semibold">Update Transaction</h1>
-        <button onClick={onClose} className="absolute right-6 top-4">
+        <button onClick={handleCloseModal} className="absolute right-6 top-4">
           <IoClose className="text-xl text-slate-600" />
         </button>
 
@@ -164,11 +184,11 @@ const EditTransactionModal = ({ onClose, data }) => {
               className="border-2 text-sm px-2 rounded-lg appearance-none h-[46px] text-slate-800 outline-none"
             >
               <option value="">Select Category</option>
-              <option className="" value="Food">
+              <option className="" value="food">
                 Food
               </option>
-              <option value="Shopping">Shopping</option>
-              <option value="Entertainment">Entertainment</option>
+              <option value="shopping">Shopping</option>
+              <option value="entertainment">Entertainment</option>
             </select>
 
             <div className="pointer-events-none absolute top-9 right-3 flex items-center text-slate-600">

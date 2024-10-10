@@ -25,13 +25,13 @@ const TransactionItem = ({
       )}
       <p className="flex-grow">{transaction_name}</p>
       <div className="flex items-start justify-between gap-3 max-w-[500px] w-2/4">
-        <p className="text-slate-400 w-1/4 first-letter:capitalize">
+        <p className="text-slate-400 w-1/4 first-letter:capitalize whitespace-normal">
           {category}
         </p>
-        <p className="text-slate-400">
+        <p className="text-slate-400 w-[30%]">
           {dayjs(date).format("DD MMM YY, hh:mm A")}
         </p>
-        <p className="font-semibold">
+        <p className="font-semibold w-1/4">
           {type === "credit" ? (
             <span className="text-green-500">+${amount}</span>
           ) : (

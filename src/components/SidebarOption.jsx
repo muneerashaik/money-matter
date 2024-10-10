@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const SidebarOption = ({ option }) => {
   const navigate = useNavigate();
   const path = window.location.pathname;
-  const user = JSON.parse(localStorage.getItem("userData"));
+  const { admin } = JSON.parse(localStorage.getItem("userData"));
 
   const renderIcon = () => {
     if (option === "dashboard") {
@@ -20,11 +20,19 @@ const SidebarOption = ({ option }) => {
     if (option === "transactions") {
       return (
         <p className="font-medium text-base">
-          {user?.admin ? "All Transactions" : "Transactions"}
+          {admin ? "All Transactions" : "Transactions"}
         </p>
       );
     } else if (option === "dashboard") {
       return <p className="font-medium text-base">Dashboard</p>;
+    }
+  };
+
+  const renderPointer = () => {
+    if (path === "/" + option) {
+      return (
+        <div className="w-2 h-14 bg-blue-600 absolute left-0 rounded-e-lg"></div>
+      );
     }
   };
 
@@ -34,9 +42,7 @@ const SidebarOption = ({ option }) => {
       style={path === "/" + option ? { color: "rgba(45, 96, 255, 1)" } : {}}
       className="flex items-center gap-3 text-slate-500 relative pl-8 h-16 cursor-pointer"
     >
-      {path === "/" + option && (
-        <div className="w-2 h-14 bg-blue-600 absolute left-0 rounded-e-lg"></div>
-      )}
+      {renderPointer()}
       {renderIcon()}
       {renderOptionName()}
     </li>
