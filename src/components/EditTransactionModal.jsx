@@ -6,6 +6,7 @@ import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { TransactionContext } from "../context/transactionContext";
 import { TailSpin } from "react-loader-spinner";
+import LoadingButton from "./LoadingButton";
 
 const EditTransactionModal = ({ onClose, data }) => {
   const [formData, setFormData] = useState({
@@ -197,25 +198,7 @@ const EditTransactionModal = ({ onClose, data }) => {
               name="date"
             />
           </div>
-          <button
-            type="submit"
-            className="flex justify-center items-center mt-5  bg-blue-500 text-white font-medium text-sm rounded-lg h-12 w-full "
-          >
-            {editLoading ? (
-              <TailSpin
-                visible={true}
-                height="30"
-                width="30"
-                color="white"
-                ariaLabel="tail-spin-loading"
-                radius="1"
-                wrapperStyle={{}}
-                wrapperClass=""
-              />
-            ) : (
-              "Edit Transaction"
-            )}
-          </button>
+          <LoadingButton action={"edit"} isLoading={editLoading} />
         </form>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { TransactionContext } from "../context/transactionContext";
 import { TailSpin } from "react-loader-spinner";
+import LoadingButton from "./LoadingButton";
 
 const AddTransactionModal = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,7 @@ const AddTransactionModal = ({ onClose }) => {
     amount: 0,
     date: "",
   });
-  const [loading, setLoading] = useState(false);
+  const [addLoading, setAddLoading] = useState(false);
   const { totalTransactionsMutate, transactionsMutate } =
     useContext(TransactionContext);
   const userData = JSON.parse(localStorage.getItem("userData"));
@@ -46,7 +47,7 @@ const AddTransactionModal = ({ onClose }) => {
 
   const handleAddTransaction = async (e) => {
     try {
-      setLoading(true);
+      setAddLoading(true);
       e.preventDefault();
       if (transactionValidation()) {
         const { name, category, date, type, amount } = formData;
@@ -90,7 +91,7 @@ const AddTransactionModal = ({ onClose }) => {
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setLoading(false);
+      setAddLoading(false);
     }
   };
 
@@ -190,25 +191,7 @@ const AddTransactionModal = ({ onClose }) => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="flex justify-center items-center mt-5  bg-blue-500 text-white font-medium text-sm rounded-lg h-12 w-full "
-          >
-            {loading ? (
-              <TailSpin
-                visible={true}
-                height="30"
-                width="30"
-                color="white"
-                ariaLabel="tail-spin-loading"
-                radius="1"
-                wrapperStyle={{}}
-                wrapperClass=""
-              />
-            ) : (
-              "Add Transaction"
-            )}
-          </button>
+          <LoadingButton action={"add"} isLoading={addLoading} />
         </form>
       </div>
     </div>

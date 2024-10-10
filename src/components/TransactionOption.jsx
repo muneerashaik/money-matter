@@ -5,7 +5,7 @@ const TransactionOption = ({ option, setType }) => {
   const { type } = useContext(TransactionContext);
   return (
     <li
-      style={option === "transactions" ? { color: "rgba(45, 96, 255, 1)" } : {}}
+      style={option === type ? { color: "rgba(45, 96, 255, 1)" } : {}}
       onClick={() => setType(option)}
       className="w-fit relative cursor-pointer"
     >

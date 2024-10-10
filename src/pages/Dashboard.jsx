@@ -4,11 +4,9 @@ import axios from "axios";
 import creditImage from "../assets/credit.png";
 import debitImage from "../assets/debit.png";
 import ConfirmModal from "../components/ConfirmModal";
-import { IoWarningOutline, IoClose } from "react-icons/io5";
 import EditTransactionModal from "../components/EditTransactionModal";
 import { TransactionContext } from "../context/transactionContext";
 import TransactionItem from "../components/TransactionItem";
-import { TailSpin } from "react-loader-spinner";
 
 const Dashboard = () => {
   const [editTransactionModal, setEditTransactionModal] = useState(false);
@@ -151,62 +149,13 @@ const Dashboard = () => {
       )}
 
       {alertModal && (
-        <ConfirmModal>
-          <button
-            onClick={() => {
-              setAlertModal(false);
-              setDeleteTransactionId("");
-            }}
-            className="absolute right-6 top-4"
-          >
-            <IoClose className="text-xl text-slate-600" />
-          </button>
-
-          <div className="flex items-start gap-4">
-            <div className="bg-orange-100 h-[46px] w-[54px] rounded-full flex justify-center items-center">
-              <div className="bg-orange-200 h-[36px] w-[36px] rounded-full flex justify-center items-center">
-                <IoWarningOutline className="text-orange-600 text-2xl" />
-              </div>
-            </div>
-
-            <div className="flex flex-col mt-[-4px]">
-              <p className="font-semibold text-lg">
-                Are you sure you want to delete?
-              </p>
-              <p className="text-slate-500 text-xs mt-1">
-                This transaction will be deleted immediately. You can’t undo
-                this action.
-              </p>
-              <div className="flex items-center gap-4 mt-4 text-sm">
-                <button
-                  onClick={handleTransactionDelete}
-                  className="bg-red-600 text-white rounded-xl py-2  w-[120px] flex items-center justify-center"
-                >
-                  {deleteLoading ? (
-                    <TailSpin
-                      visible={true}
-                      height="20"
-                      width="20"
-                      color="white"
-                      ariaLabel="tail-spin-loading"
-                      radius="1"
-                      wrapperStyle={{}}
-                      wrapperClass=""
-                    />
-                  ) : (
-                    <p className="text-sm">Yes, Delete</p>
-                  )}
-                </button>
-                <button
-                  onClick={() => setAlertModal(false)}
-                  className="border-slate-200 border-2 w-[120px] text-black rounded-xl py-2 px-4"
-                >
-                  No, Leave it
-                </button>
-              </div>
-            </div>
-          </div>
-        </ConfirmModal>
+        <ConfirmModal
+          toggleModal={() => setAlertModal(false)}
+          setActionId={setDeleteTransactionId}
+          actionLoading={deleteLoading}
+          action={"delete"}
+          actionHandler={() => handleTransactionDelete()}
+        />
       )}
 
       {editTransactionModal && (

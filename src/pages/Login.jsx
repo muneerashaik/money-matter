@@ -5,9 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
-import Cookies from "js-cookie";
 import { TailSpin } from "react-loader-spinner";
-import { TransactionContext } from "../context/transactionContext";
 import { UserContext } from "../context/userContext";
 
 const Login = ({ admin }) => {

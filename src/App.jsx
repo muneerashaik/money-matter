@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Route, Routes, useNavigate, Outlet } from "react-router-dom";
+import React from "react";
+import { Route, Routes, Outlet } from "react-router-dom";
 import Transactions from "./pages/Transactions";
 import Dashboard from "./pages/Dashboard";
 import Sidebar from "./components/Sidebar";
