@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import creditImage from "../assets/credit.png";
@@ -12,7 +12,6 @@ import EmptyView from "../components/EmptyView";
 import ChartComponent from "./Chart";
 
 const Dashboard = () => {
-  const [editTransactionModal, setEditTransactionModal] = useState(false);
   const {
     latestTransactions,
     transactionsLoading,
@@ -20,6 +19,10 @@ const Dashboard = () => {
     totalTransactionsData,
     totalTransactionsLoading,
     totalTransactionsMutate,
+    deleteTransactionId,
+    setDeleteTransactionId,
+    editTransactionModal,
+    setEditTransactionModal,
   } = useContext(TransactionContext);
   const [editTransactionData, setEditTransactionData] = useState({
     name: "",
@@ -31,9 +34,8 @@ const Dashboard = () => {
   });
 
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [deleteTransactionId, setDeleteTransactionId] = useState(0);
-  const [alertModal, setAlertModal] = useState(false);
 
+  const [alertModal, setAlertModal] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
 
   const handleTransactionDelete = async () => {

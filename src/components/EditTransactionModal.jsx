@@ -10,12 +10,12 @@ import LoadingButton from "./LoadingButton";
 const EditTransactionModal = ({ onClose, data }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    type: "",
-    category: "",
-    amount: 0,
-    date: "",
-    id: "",
+    name: null,
+    type: null,
+    category: null,
+    amount: null,
+    date: null,
+    id: null,
   });
   const [editLoading, setEditLoading] = useState(false);
   const { transactionsMutate, totalTransactionsMutate } =
@@ -39,19 +39,19 @@ const EditTransactionModal = ({ onClose, data }) => {
 
   const transactionValidation = () => {
     const { name, category, date, type, amount } = formData;
-    if (name === "") {
+    if (!name) {
       toast.error("Please enter name");
       return false;
-    } else if (category === "") {
+    } else if (!category) {
       toast.error("Please enter category");
       return false;
-    } else if (date === "") {
+    } else if (!date) {
       toast.error("Please enter date");
       return false;
-    } else if (type === "") {
+    } else if (!type) {
       toast.error("Please enter type");
       return false;
-    } else if (amount === "") {
+    } else if (!amount) {
       toast.error("Please enter amount");
       return false;
     }

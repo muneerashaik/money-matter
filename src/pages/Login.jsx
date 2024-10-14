@@ -1,22 +1,24 @@
-import { IoMdMail } from "react-icons/io";
-import { RiLock2Line } from "react-icons/ri";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { TailSpin } from "react-loader-spinner";
+import { IoMdMail } from "react-icons/io";
+import { RiLock2Line } from "react-icons/ri";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { UserContext } from "../context/userContext";
 
 const Login = ({ admin }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { setUserId } = useContext(UserContext);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (localStorage.getItem("userData")) {
       navigate("/dashboard");

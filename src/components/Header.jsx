@@ -1,21 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 import { TransactionContext } from "../context/transactionContext";
 import AddTransactionModal from "./AddTransactionModal";
-import { useNavigate } from "react-router-dom";
 import TransactionOption from "./TransactionOption";
 
 const Header = () => {
   const { setType } = useContext(TransactionContext);
   const path = window.location.pathname;
   const [addTransactionModal, setAddTransactionModal] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!localStorage.getItem("userData")) {
-      navigate("/login");
-    }
-  }, []);
 
   const renderHeaderName = () => {
     switch (path) {

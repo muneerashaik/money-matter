@@ -57,7 +57,7 @@ function BarChart() {
         data: [30, 20],
         backgroundColor: "#FCAA0B",
         borderWidth: 0,
-        borderRadius: 20,
+        borderRadius: 12,
         maxBarThickness: 60,
       },
       {
@@ -65,7 +65,7 @@ function BarChart() {
         data: [30, 20],
         backgroundColor: "#4D78FF",
         borderWidth: 0,
-        borderRadius: 20,
+        borderRadius: 12,
         maxBarThickness: 60,
       },
     ],
@@ -113,7 +113,6 @@ function BarChart() {
           if (!daysData.day) {
             totalObject = { credit: 0, debit: 0 };
           } else {
-            console.log(day);
             totalObject = daysData.get(day);
           }
           totalObject[type] = sum;

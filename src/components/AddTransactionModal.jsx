@@ -9,11 +9,11 @@ import LoadingButton from "./LoadingButton";
 const AddTransactionModal = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    type: "",
-    category: "",
-    amount: 0,
-    date: "",
+    name: null,
+    type: null,
+    category: null,
+    amount: null,
+    date: null,
   });
   const [addLoading, setAddLoading] = useState(false);
   const { totalTransactionsMutate, transactionsMutate } =

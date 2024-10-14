@@ -3,14 +3,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import { UserContext } from "./userContext";
-import { useNavigate } from "react-router-dom";
 
 export const TransactionContext = createContext();
 
 export const TransactionContextProvider = ({ children }) => {
   const [type, setType] = useState("transactions");
   const { userId } = useContext(UserContext);
-  const navigate = useNavigate();
+  const [editTransactionModal, setEditTransactionModal] = useState(false);
+  const [deleteTransactionId, setDeleteTransactionId] = useState(null);
 
   const transactionsFetcher = async (url) => {
     try {
@@ -103,6 +103,10 @@ export const TransactionContextProvider = ({ children }) => {
         totalTransactionsData,
         totalTransactionsLoading,
         totalTransactionsMutate,
+        editTransactionModal,
+        setEditTransactionModal,
+        deleteTransactionId,
+        setDeleteTransactionId,
       }}
     >
       {children}

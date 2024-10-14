@@ -6,10 +6,8 @@ import { useNavigate } from "react-router-dom";
 const SidebarOption = ({ option }) => {
   const navigate = useNavigate();
   const path = window.location.pathname;
-  let admin;
-  if (localStorage.getItem("userData")) {
-    admin = JSON.parse(localStorage.getItem("userData")).admin;
-  }
+
+  const { admin } = JSON.parse(localStorage.getItem("userData"));
 
   const renderIcon = () => {
     if (option === "dashboard") {

@@ -1,15 +1,14 @@
-import axios from "axios";
 import React, { useContext, useState } from "react";
+import axios from "axios";
+import toast from "react-hot-toast";
 import { TransactionContext } from "../context/transactionContext";
 import ConfirmModal from "../components/ConfirmModal";
 import EditTransactionModal from "../components/EditTransactionModal";
-import toast from "react-hot-toast";
 import TransactionItem from "../components/TransactionItem";
 import Loader from "../components/Loader";
 import EmptyView from "../components/EmptyView";
 
 const Transactions = () => {
-  const [deleteTransactionId, setDeleteTransactionId] = useState("");
   const [alertModal, setAlertModal] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const {
@@ -18,9 +17,12 @@ const Transactions = () => {
     transactionsLoading,
     transactionsMutate,
     totalTransactionsMutate,
+    deleteTransactionId,
+    setDeleteTransactionId,
   } = useContext(TransactionContext);
 
-  const [editTransactionModal, setEditTransactionModal] = useState(false);
+  const { editTransactionModal, setEditTransactionModal } =
+    useContext(TransactionContext);
   const [editTransactionData, setEditTransactionData] = useState({
     name: "",
     type: "",
