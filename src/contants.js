@@ -25,3 +25,4 @@ export const API_UPDATE_TRANSACTION =
 export const SIDEBAR_OPTIONS = ["dashboard", "transactions"];
 export const NUMBER_OF_TRANSACTIONS = 3;
 export const LOCALSTORAGE_KEY = "userData";
+export const INITIAL_ACTIVE_TAB = "transactions";

@@ -7,6 +7,7 @@ import { UserContext } from "./userContext";
 import {
   API_ALL_TRANSACTIONS,
   API_TOTAL_DEBIT_CREDIT_TRANSACTIONS,
+  INITIAL_ACTIVE_TAB,
   NUMBER_OF_TRANSACTIONS,
   X_HASURA_ADMIN_SECRET,
   X_HASURA_ROLE,
@@ -24,7 +25,7 @@ const userValidation = () => {
 };
 
 export const TransactionContextProvider = ({ children }) => {
-  const [activeTab, setActiveTab] = useState("transactions");
+  const [activeTab, setActiveTab] = useState(INITIAL_ACTIVE_TAB);
   const { userId } = userValidation();
   const [showEditTransactionModal, setShowEditTransactionModal] =
     useState(false);
