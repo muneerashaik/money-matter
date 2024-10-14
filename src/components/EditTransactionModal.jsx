@@ -6,21 +6,22 @@ import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { TransactionContext } from "../context/transactionContext";
 import LoadingButton from "./LoadingButton";
+import { UserContext } from "../context/userContext";
 
 const EditTransactionModal = ({ onClose, data }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
-    name: null,
-    type: null,
-    category: null,
-    amount: null,
-    date: null,
-    id: null,
+    name: "",
+    type: "",
+    category: "",
+    amount: 0,
+    date: "",
+    id: "",
   });
   const [editLoading, setEditLoading] = useState(false);
   const { transactionsMutate, totalTransactionsMutate } =
     useContext(TransactionContext);
-  const { userId } = JSON.parse(localStorage.getItem("userData"));
+  const { userId } = useContext(UserContext);
 
   useEffect(() => {
     setIsVisible(true); // Trigger the animation when modal is mounted

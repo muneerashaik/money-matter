@@ -1,17 +1,18 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
 import toast from "react-hot-toast";
 import SidebarOption from "./SidebarOption";
 import ConfirmModal from "./ConfirmModal";
+import { UserContext } from "../context/userContext";
 
 const Sidebar = () => {
   const [alertModal, setAlertModal] = useState(false);
   const [userData, setUserData] = useState(null);
   const [logoutLoading, setLogoutLoading] = useState(false);
 
-  const { userId } = JSON.parse(localStorage.getItem("userData"));
+  const { userId } = useContext(UserContext);
 
   const fetchUserProfile = async () => {
     try {

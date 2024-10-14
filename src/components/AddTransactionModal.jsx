@@ -5,20 +5,22 @@ import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
 import { TransactionContext } from "../context/transactionContext";
 import LoadingButton from "./LoadingButton";
+import { UserContext } from "../context/userContext";
 
 const AddTransactionModal = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [formData, setFormData] = useState({
-    name: null,
-    type: null,
-    category: null,
-    amount: null,
-    date: null,
+    name: "",
+    type: "",
+    category: "",
+    amount: 0,
+    date: "",
   });
   const [addLoading, setAddLoading] = useState(false);
   const { totalTransactionsMutate, transactionsMutate } =
     useContext(TransactionContext);
-  const { userId } = JSON.parse(localStorage.getItem("userData"));
+  const { userId } = useContext(UserContext);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -41,7 +43,7 @@ const AddTransactionModal = ({ onClose }) => {
     } else if (type === "") {
       toast.error("Please enter type");
       return false;
-    } else if (amount === "") {
+    } else if (amount === 0) {
       toast.error("Please enter amount");
       return false;
     }

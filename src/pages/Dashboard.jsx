@@ -10,6 +10,7 @@ import TransactionItem from "../components/TransactionItem";
 import Loader from "../components/Loader";
 import EmptyView from "../components/EmptyView";
 import ChartComponent from "./Chart";
+import { UserContext } from "../context/userContext";
 
 const Dashboard = () => {
   const {
@@ -36,7 +37,7 @@ const Dashboard = () => {
   const [deleteLoading, setDeleteLoading] = useState(false);
 
   const [alertModal, setAlertModal] = useState(false);
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const { userId } = useContext(UserContext);
 
   const handleTransactionDelete = async () => {
     try {
@@ -50,7 +51,7 @@ const Dashboard = () => {
           "x-hasura-admin-secret":
             "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
           "x-hasura-role": "user",
-          "x-hasura-user-id": userData.userId,
+          "x-hasura-user-id": userId,
         },
       });
 
