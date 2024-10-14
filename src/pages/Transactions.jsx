@@ -124,10 +124,23 @@ const Transactions = () => {
     return <ErrorPage />;
   }
 
-  return (
-    <div className="min-h-dh w-full p-4 bg-slate-100">
-      {RenderTransactions(activeTab)}
-      {showEditTransactionModal && (
+  const renderConfirmModal = () => {
+    if (alertModal) {
+      return (
+        <ConfirmModal
+          toggleModal={() => setAlertModal(false)}
+          setActionId={setDeleteTransactionId}
+          actionLoading={deleteLoading}
+          action={"delete"}
+          actionHandler={() => handleTransactionDelete()}
+        />
+      );
+    }
+  };
+
+  const renderEditTransactionModal = () => {
+    if (showEditTransactionModal) {
+      return (
         <EditTransactionModal
           onClose={() => {
             setShowEditTransactionModal(false);
@@ -142,17 +155,15 @@ const Transactions = () => {
           }}
           data={editTransactionData}
         />
-      )}
+      );
+    }
+  };
 
-      {alertModal && (
-        <ConfirmModal
-          toggleModal={() => setAlertModal(false)}
-          setActionId={setDeleteTransactionId}
-          actionLoading={deleteLoading}
-          action={"delete"}
-          actionHandler={() => handleTransactionDelete()}
-        />
-      )}
+  return (
+    <div className="min-h-dh w-full p-4 bg-slate-100">
+      {RenderTransactions(activeTab)}
+      {renderEditTransactionModal()}
+      {renderConfirmModal()}
     </div>
   );
 };
