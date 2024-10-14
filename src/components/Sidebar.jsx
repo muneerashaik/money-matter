@@ -3,9 +3,18 @@ import React, { useContext, useEffect, useState } from "react";
 import { FaCircleUser } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
 import toast from "react-hot-toast";
+
 import SidebarOption from "./SidebarOption";
 import ConfirmModal from "./ConfirmModal";
 import { UserContext } from "../context/userContext";
+import { useNavigate } from "react-router-dom";
+import {
+  API_PROFILE_URL,
+  LOCALSTORAGE_KEY,
+  SIDEBAR_OPTIONS,
+  X_HASURA_ADMIN_SECRET,
+  X_HASURA_ROLE,
+} from "../contants";
 
 const Sidebar = () => {
   const [alertModal, setAlertModal] = useState(false);
@@ -13,15 +22,15 @@ const Sidebar = () => {
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   const { userId } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const fetchUserProfile = async () => {
     try {
-      const url = "https://bursting-gelding-24.hasura.app/api/rest/profile";
+      const url = API_PROFILE_URL;
       const res = await axios.get(url, {
         headers: {
-          "x-hasura-admin-secret":
-            "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
-          "x-hasura-role": "user",
+          "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
+          "x-hasura-role": X_HASURA_ROLE,
           "x-hasura-user-id": userId,
         },
       });
@@ -29,30 +38,31 @@ const Sidebar = () => {
       if (res.status === 200) {
         setUserData(res.data.users[0]);
       }
-    } catch (error) {}
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   useEffect(() => {
-    if (localStorage.getItem("userData")) {
+    if (userId) {
       fetchUserProfile();
     }
-  }, []);
+  }, [userId]);
 
   const handleLogout = () => {
     try {
       setLogoutLoading(true);
-      localStorage.removeItem("userData");
+      localStorage.removeItem(LOCALSTORAGE_KEY);
       toast.success("Logout successful", { duration: 1000 });
+      navigate("/login");
     } catch (error) {
       toast.error(error.message);
-    } finally {
-      setLogoutLoading(false);
     }
   };
 
-  const options = ["dashboard", "transactions"];
+  const options = SIDEBAR_OPTIONS;
 
-  return (
-    <div className="min-w-[200px] z-50 fixed flex flex-col bg-white py-4 min-h-dvh border-r-2 border-r-slate-100">
+  const renderHeader = () => {
+    return (
       <h1
         style={{ color: "rgba(248, 154, 35, 1)" }}
         className="font-bold text-xl text-center"
@@ -62,13 +72,21 @@ const Sidebar = () => {
           Matters
         </span>
       </h1>
+    );
+  };
 
+  const renderOptions = () => {
+    return (
       <ul className="flex flex-col w-full mt-6">
         {options.map((option) => (
           <SidebarOption key={option} option={option} />
         ))}
       </ul>
+    );
+  };
 
+  const renderProfile = () => {
+    return (
       <div className="flex gap-2 items-start px-2 mt-auto">
         <FaCircleUser className="text-2xl text-blue-600" />
 
@@ -90,14 +108,31 @@ const Sidebar = () => {
           className="text-lg cursor-pointer"
         />
       </div>
-      {alertModal && (
+    );
+  };
+
+  const renderConfirmModal = () => {
+    if (alertModal) {
+      return (
         <ConfirmModal
           toggleModal={() => setAlertModal(false)}
           actionLoading={logoutLoading}
           action="logout"
           actionHandler={handleLogout}
         />
-      )}
+      );
+    }
+  };
+
+  return (
+    <div className="min-w-[200px] z-50 fixed flex flex-col bg-white py-4 min-h-dvh border-r-2 border-r-slate-100">
+      {renderHeader()}
+
+      {renderOptions()}
+
+      {renderProfile()}
+
+      {renderConfirmModal()}
     </div>
   );
 };

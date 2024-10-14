@@ -6,7 +6,9 @@ import { TailSpin } from "react-loader-spinner";
 import { IoMdMail } from "react-icons/io";
 import { RiLock2Line } from "react-icons/ri";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
 import { UserContext } from "../context/userContext";
+import { API_GET_USER_ID, X_HASURA_ADMIN_SECRET } from "../contants";
 
 const Login = ({ admin }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,8 +49,7 @@ const Login = ({ admin }) => {
     try {
       setLoading(true);
       if (handleValidation()) {
-        const url =
-          "https://bursting-gelding-24.hasura.app/api/rest/get-user-id";
+        const url = API_GET_USER_ID;
 
         const response = await axios.post(
           url,
@@ -58,8 +59,7 @@ const Login = ({ admin }) => {
           },
           {
             headers: {
-              "x-hasura-admin-secret":
-                "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
+              "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
             },
           }
         );

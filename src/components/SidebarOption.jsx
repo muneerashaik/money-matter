@@ -8,29 +8,33 @@ const SidebarOption = ({ option }) => {
   const path = window.location.pathname;
 
   const { admin } = JSON.parse(localStorage.getItem("userData"));
+  const currentPath = "/" + option;
 
-  const renderIcon = () => {
-    if (option === "dashboard") {
-      return <GoHomeFill className="text-xl" />;
-    } else if (option === "transactions") {
-      return <TbReceiptDollar className="text-xl" />;
-    }
-  };
-
-  const renderOptionName = () => {
-    if (option === "transactions") {
-      return (
-        <p className="font-medium text-base">
-          {admin ? "All Transactions" : "Transactions"}
-        </p>
-      );
-    } else if (option === "dashboard") {
-      return <p className="font-medium text-base">Dashboard</p>;
+  const renderOption = () => {
+    switch (option) {
+      case "dashboard":
+        return (
+          <>
+            <GoHomeFill className="text-xl" />
+            <p className="font-medium text-base">Dashboard</p>
+          </>
+        );
+      case "transactions":
+        return (
+          <>
+            <TbReceiptDollar className="text-xl" />
+            <p className="font-medium text-base">
+              {admin ? "All Transactions" : "Transactions"}
+            </p>
+          </>
+        );
+      default:
+        return;
     }
   };
 
   const renderPointer = () => {
-    if (path === "/" + option) {
+    if (path === currentPath) {
       return (
         <div className="w-2 h-14 bg-blue-600 absolute left-0 rounded-e-lg"></div>
       );
@@ -39,13 +43,12 @@ const SidebarOption = ({ option }) => {
 
   return (
     <li
-      onClick={() => navigate("/" + option)}
-      style={path === "/" + option ? { color: "rgba(45, 96, 255, 1)" } : {}}
+      onClick={() => navigate(currentPath)}
+      style={path === currentPath ? { color: "rgba(45, 96, 255, 1)" } : {}}
       className="flex items-center gap-3 text-slate-500 relative pl-8 h-16 cursor-pointer"
     >
       {renderPointer()}
-      {renderIcon()}
-      {renderOptionName()}
+      {renderOption()}
     </li>
   );
 };

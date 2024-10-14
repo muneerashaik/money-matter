@@ -3,10 +3,13 @@ import { TailSpin } from "react-loader-spinner";
 
 const LoadingButton = ({ action, isLoading }) => {
   const renderButtonText = () => {
-    if (action === "edit") {
-      return "Edit Transaction";
-    } else if (action === "add") {
-      return "Add Transaction";
+    switch (action) {
+      case "edit":
+        return "Edit Transaction";
+      case "add":
+        return "Add Transaction";
+      default:
+        break;
     }
   };
 

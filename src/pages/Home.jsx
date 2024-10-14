@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { TransactionContextProvider } from "../context/transactionContext";
+import { LOCALSTORAGE_KEY } from "../contants";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -11,7 +13,7 @@ const Home = () => {
     navigate("/dashboard");
   }, []);
 
-  if (localStorage.getItem("userData")) {
+  if (localStorage.getItem(LOCALSTORAGE_KEY)) {
     return (
       <TransactionContextProvider>
         <div className="relative">
@@ -24,7 +26,7 @@ const Home = () => {
       </TransactionContextProvider>
     );
   }
-  return;
+  return <></>;
 };
 
 export default Home;

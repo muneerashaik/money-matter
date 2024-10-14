@@ -3,9 +3,15 @@ import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
+
 import { TransactionContext } from "../context/transactionContext";
 import LoadingButton from "./LoadingButton";
 import { UserContext } from "../context/userContext";
+import {
+  API_ADD_TRANSACTION,
+  X_HASURA_ADMIN_SECRET,
+  X_HASURA_ROLE,
+} from "../contants";
 
 const AddTransactionModal = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -17,7 +23,7 @@ const AddTransactionModal = ({ onClose }) => {
     date: "",
   });
   const [addLoading, setAddLoading] = useState(false);
-  const { totalTransactionsMutate, transactionsMutate } =
+  const { totalDebitCreditTransactionsMutate, transactionsMutate } =
     useContext(TransactionContext);
   const { userId } = useContext(UserContext);
 
@@ -57,8 +63,7 @@ const AddTransactionModal = ({ onClose }) => {
       e.preventDefault();
       if (transactionValidation()) {
         const { name, category, date, type, amount } = formData;
-        const url =
-          "https://bursting-gelding-24.hasura.app/api/rest/add-transaction";
+        const url = API_ADD_TRANSACTION;
 
         const res = await axios.post(
           url,
@@ -72,9 +77,8 @@ const AddTransactionModal = ({ onClose }) => {
           },
           {
             headers: {
-              "x-hasura-admin-secret":
-                "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
-              "x-hasura-role": "user",
+              "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
+              "x-hasura-role": X_HASURA_ROLE,
               "x-hasura-user-id": userId,
             },
           }
@@ -83,7 +87,7 @@ const AddTransactionModal = ({ onClose }) => {
         if (res.status === 200) {
           toast.success("Transaction Added");
           transactionsMutate();
-          totalTransactionsMutate();
+          totalDebitCreditTransactionsMutate();
           setFormData({
             name: "",
             type: "",

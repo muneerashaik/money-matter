@@ -1,12 +1,13 @@
 import React, { useContext, useRef } from "react";
+
 import { TransactionContext } from "../context/transactionContext";
 
-const TransactionOption = ({ option, setType }) => {
-  const { type } = useContext(TransactionContext);
+const TransactionOption = ({ option }) => {
+  const { setActiveTab, activeTab } = useContext(TransactionContext);
   const tabRef = useRef();
 
   const renderPointer = () => {
-    if (option === type) {
+    if (option === activeTab) {
       return (
         <div
           className={`tab h-1 transition-colors w-full rounded-t-md bg-blue-500 absolute bottom-0 `}
@@ -18,9 +19,9 @@ const TransactionOption = ({ option, setType }) => {
   return (
     <li
       ref={tabRef}
-      style={option === type ? { color: "rgba(45, 96, 255, 1)" } : {}}
+      style={option === activeTab ? { color: "rgba(45, 96, 255, 1)" } : {}}
       onClick={() => {
-        setType(option);
+        setActiveTab(option);
       }}
       className="w-fit relative cursor-pointer"
     >

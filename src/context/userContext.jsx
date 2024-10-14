@@ -1,6 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { LOCALSTORAGE_KEY } from "../contants";
+
 export const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }) => {
@@ -8,18 +10,22 @@ export const UserContextProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!localStorage.getItem("userData")) {
+    if (!localStorage.getItem(LOCALSTORAGE_KEY)) {
       navigate("/login", { replace: true });
-    }
-    if (localStorage.getItem("userData")) {
-      const userData = JSON.parse(localStorage.getItem("userData"));
-      setUserId(userData?.userId);
+    } else {
+      const userData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
+      const { userId } = userData;
+      setUserId(userId);
     }
   }, [userId]);
 
-  return (
-    <UserContext.Provider value={{ userId, setUserId }}>
-      {children}
-    </UserContext.Provider>
-  );
+  if (userId) {
+    return (
+      <UserContext.Provider value={{ userId, setUserId }}>
+        {children}
+      </UserContext.Provider>
+    );
+  } else {
+    return <></>;
+  }
 };

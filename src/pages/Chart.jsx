@@ -11,6 +11,7 @@ import {
 } from "chart.js";
 import toast from "react-hot-toast";
 import axios from "axios";
+
 import { UserContext } from "../context/userContext";
 import Loader from "../components/Loader";
 
@@ -118,7 +119,6 @@ function BarChart() {
           totalObject[type] = sum;
           daysData.set(day, totalObject);
         });
-        console.log(daysData);
       }
     } catch (error) {
       toast.error(error.message);

@@ -9,11 +9,12 @@ import { MdDeleteOutline, MdOutlineModeEdit } from "react-icons/md";
 const TransactionItem = ({
   data,
   setEditTransactionData,
-  setEditTransactionModal,
+  setShowEditTransactionModal,
   setAlertModal,
   setDeleteTransactionId,
 }) => {
   const { transaction_name, id, category, amount, date, type } = data;
+
   return (
     <li
       className={`flex items-center gap-2 border-b-2 p-2 text-sm last:border-none`}
@@ -48,7 +49,7 @@ const TransactionItem = ({
               type,
               id,
             });
-            setEditTransactionModal(true);
+            setShowEditTransactionModal(true);
           }}
         >
           <MdOutlineModeEdit className="text-xl text-blue-400" />

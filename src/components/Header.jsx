@@ -1,11 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { IoIosAdd } from "react-icons/io";
-import { TransactionContext } from "../context/transactionContext";
+
 import AddTransactionModal from "./AddTransactionModal";
 import TransactionOption from "./TransactionOption";
 
 const Header = () => {
-  const { setType } = useContext(TransactionContext);
   const path = window.location.pathname;
   const [addTransactionModal, setAddTransactionModal] = useState(false);
 
@@ -42,7 +41,7 @@ const Header = () => {
           className="flex items-center gap-6 text-sm absolute bottom-0 "
         >
           {options.map((option) => (
-            <TransactionOption key={option} option={option} setType={setType} />
+            <TransactionOption key={option} option={option} />
           ))}
         </ul>
       )}

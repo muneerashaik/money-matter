@@ -4,9 +4,15 @@ import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { FiChevronDown } from "react-icons/fi";
 import { IoClose } from "react-icons/io5";
+
 import { TransactionContext } from "../context/transactionContext";
 import LoadingButton from "./LoadingButton";
 import { UserContext } from "../context/userContext";
+import {
+  API_UPDATE_TRANSACTION,
+  X_HASURA_ADMIN_SECRET,
+  X_HASURA_ROLE,
+} from "../contants";
 
 const EditTransactionModal = ({ onClose, data }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -19,7 +25,7 @@ const EditTransactionModal = ({ onClose, data }) => {
     id: "",
   });
   const [editLoading, setEditLoading] = useState(false);
-  const { transactionsMutate, totalTransactionsMutate } =
+  const { transactionsMutate, totalDebitCreditTransactionsMutate } =
     useContext(TransactionContext);
   const { userId } = useContext(UserContext);
 
@@ -66,9 +72,7 @@ const EditTransactionModal = ({ onClose, data }) => {
       e.preventDefault();
       if (transactionValidation()) {
         const { name, category, date, type, amount, id } = formData;
-        const url =
-          "https://bursting-gelding-24.hasura.app/api/rest/update-transaction";
-
+        const url = API_UPDATE_TRANSACTION;
         const res = await axios.post(
           url,
           {
@@ -81,9 +85,8 @@ const EditTransactionModal = ({ onClose, data }) => {
           },
           {
             headers: {
-              "x-hasura-admin-secret":
-                "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
-              "x-hasura-role": "user",
+              "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
+              "x-hasura-role": X_HASURA_ROLE,
               "x-hasura-user-id": userId,
             },
           }
@@ -92,7 +95,7 @@ const EditTransactionModal = ({ onClose, data }) => {
         if (res.status === 200) {
           toast.success("Transaction Updated");
           transactionsMutate();
-          totalTransactionsMutate();
+          totalDebitCreditTransactionsMutate();
           setFormData({
             name: "",
             type: "",
@@ -101,6 +104,8 @@ const EditTransactionModal = ({ onClose, data }) => {
             date: "",
           });
           onClose();
+        } else {
+          toast.error("Response is " + res.status);
         }
       }
     } catch (error) {

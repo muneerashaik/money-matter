@@ -1,28 +1,37 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+
 import { TransactionContext } from "../context/transactionContext";
 import ConfirmModal from "../components/ConfirmModal";
 import EditTransactionModal from "../components/EditTransactionModal";
 import TransactionItem from "../components/TransactionItem";
 import Loader from "../components/Loader";
 import EmptyView from "../components/EmptyView";
+import {
+  API_DELETE_TRANSACTION,
+  X_HASURA_ADMIN_SECRET,
+  X_HASURA_ROLE,
+} from "../contants";
+import { UserContext } from "../context/userContext";
+import ErrorPage from "../components/ErrorPage";
 
 const Transactions = () => {
   const [alertModal, setAlertModal] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const {
-    type: tabType,
+    activeTab,
     transactions,
     transactionsLoading,
     transactionsMutate,
-    totalTransactionsMutate,
+    totalDebitCreditTransactionsMutate,
     deleteTransactionId,
     setDeleteTransactionId,
+    showEditTransactionModal,
+    setShowEditTransactionModal,
+    transactionsError,
   } = useContext(TransactionContext);
 
-  const { editTransactionModal, setEditTransactionModal } =
-    useContext(TransactionContext);
   const [editTransactionData, setEditTransactionData] = useState({
     name: "",
     type: "",
@@ -31,28 +40,26 @@ const Transactions = () => {
     date: "",
     id: "",
   });
-  const userData = JSON.parse(localStorage.getItem("userData"));
+
+  const { userId } = useContext(UserContext);
 
   const handleTransactionDelete = async () => {
     try {
       setDeleteLoading(true);
-      const url =
-        "https://bursting-gelding-24.hasura.app/api/rest/delete-transaction?id=" +
-        deleteTransactionId;
+      const url = API_DELETE_TRANSACTION + deleteTransactionId;
 
       const res = await axios.delete(url, {
         headers: {
-          "x-hasura-admin-secret":
-            "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
-          "x-hasura-role": "user",
-          "x-hasura-user-id": userData.userId,
+          "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
+          "x-hasura-role": X_HASURA_ROLE,
+          "x-hasura-user-id": userId,
         },
       });
 
       if (res.status === 200) {
         toast.success("Transaction deleted");
         transactionsMutate();
-        totalTransactionsMutate();
+        totalDebitCreditTransactionsMutate();
       }
     } catch (error) {
       toast.error(error.message);
@@ -68,7 +75,7 @@ const Transactions = () => {
   let transactionsData = [];
   transactions?.forEach(
     ({ transaction_name, id, category, amount, date, type }) => {
-      if (tabType === "transactions" || tabType === type) {
+      if (activeTab === "transactions" || activeTab === type) {
         transactionsData.push(
           <TransactionItem
             key={id}
@@ -81,7 +88,7 @@ const Transactions = () => {
               type,
             }}
             setEditTransactionData={setEditTransactionData}
-            setEditTransactionModal={setEditTransactionModal}
+            setShowEditTransactionModal={setShowEditTransactionModal}
             setAlertModal={setAlertModal}
             setDeleteTransactionId={setDeleteTransactionId}
           />
@@ -113,13 +120,17 @@ const Transactions = () => {
     );
   };
 
+  if (transactionsError) {
+    return <ErrorPage />;
+  }
+
   return (
     <div className="min-h-dh w-full p-4 bg-slate-100">
-      {RenderTransactions(tabType)}
-      {editTransactionModal && (
+      {RenderTransactions(activeTab)}
+      {showEditTransactionModal && (
         <EditTransactionModal
           onClose={() => {
-            setEditTransactionModal(false);
+            setShowEditTransactionModal(false);
             setEditTransactionData({
               name: "",
               type: "",
