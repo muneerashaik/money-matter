@@ -7,6 +7,10 @@ import Login from "./pages/Login";
 import { TransactionContextProvider } from "./context/transactionContext";
 import Home from "./pages/Home";
 
+
+//Import orders
+//Remove the context wrapping from here
+//No magic strings
 const App = () => {
   return (
     <>
