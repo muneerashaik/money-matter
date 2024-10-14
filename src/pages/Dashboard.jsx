@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 import creditImage from "../assets/credit.png";
@@ -9,6 +9,7 @@ import { TransactionContext } from "../context/transactionContext";
 import TransactionItem from "../components/TransactionItem";
 import Loader from "../components/Loader";
 import EmptyView from "../components/EmptyView";
+import ChartComponent from "./Chart";
 
 const Dashboard = () => {
   const [editTransactionModal, setEditTransactionModal] = useState(false);
@@ -156,6 +157,8 @@ const Dashboard = () => {
           )}
         </>
       )}
+
+      <ChartComponent />
 
       {alertModal && (
         <ConfirmModal

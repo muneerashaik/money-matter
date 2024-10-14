@@ -2,11 +2,10 @@ import React from "react";
 import { Route, Routes, Outlet } from "react-router-dom";
 import Transactions from "./pages/Transactions";
 import Dashboard from "./pages/Dashboard";
-import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
 import { Toaster } from "react-hot-toast";
 import Login from "./pages/Login";
 import { TransactionContextProvider } from "./context/transactionContext";
+import Home from "./pages/Home";
 
 const App = () => {
   return (
@@ -19,13 +18,7 @@ const App = () => {
           path="/"
           element={
             <TransactionContextProvider>
-              <div className="relative">
-                <Sidebar />
-                <div className="ml-[200px]">
-                  <Header />
-                  <Outlet />
-                </div>
-              </div>
+              <Home />
             </TransactionContextProvider>
           }
         >

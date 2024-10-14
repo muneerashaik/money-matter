@@ -3,8 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCircleUser } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
-
-import { IoClose } from "react-icons/io5";
 import toast from "react-hot-toast";
 import SidebarOption from "./SidebarOption";
 import ConfirmModal from "./ConfirmModal";
@@ -15,7 +13,10 @@ const Sidebar = () => {
   const [logoutLoading, setLogoutLoading] = useState(false);
 
   const navigate = useNavigate();
-  const { userId } = JSON.parse(localStorage.getItem("userData"));
+  let userId;
+  if (localStorage.getItem("userData")) {
+    userId = JSON.parse(localStorage.getItem("userData")).userId;
+  }
 
   const fetchUserProfile = async () => {
     try {
@@ -35,7 +36,9 @@ const Sidebar = () => {
     } catch (error) {}
   };
   useEffect(() => {
-    fetchUserProfile();
+    if (localStorage.getItem("userData")) {
+      fetchUserProfile();
+    }
   }, []);
 
   const handleLogout = () => {
@@ -43,9 +46,6 @@ const Sidebar = () => {
       setLogoutLoading(true);
       localStorage.removeItem("userData");
       toast.success("Logout successful", { duration: 1000 });
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
     } catch (error) {
       toast.error(error.message);
     } finally {

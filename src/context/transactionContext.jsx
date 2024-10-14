@@ -3,12 +3,14 @@ import { createContext, useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import useSWR from "swr";
 import { UserContext } from "./userContext";
+import { useNavigate } from "react-router-dom";
 
 export const TransactionContext = createContext();
 
 export const TransactionContextProvider = ({ children }) => {
   const [type, setType] = useState("transactions");
   const { userId } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const transactionsFetcher = async (url) => {
     try {
