@@ -102,11 +102,13 @@ const Sidebar = () => {
           </p>
         </div>
 
-        <LuLogOut
-          onClick={() => setAlertModal(true)}
-          color="rgba(113, 142, 191, 1)"
-          className="text-lg cursor-pointer"
-        />
+        <button>
+          <LuLogOut
+            onClick={() => setAlertModal(true)}
+            color="rgba(113, 142, 191, 1)"
+            className="text-lg "
+          />
+        </button>
       </div>
     );
   };

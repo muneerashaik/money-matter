@@ -52,7 +52,7 @@ export const TransactionContextProvider = ({ children }) => {
         const { transactions } = data;
         return transactions;
       } else {
-        toast.error("Something went wrong");
+        toast.error("Responded with status" + res.status);
       }
     } catch (error) {
       console.log(error);
@@ -81,6 +81,8 @@ export const TransactionContextProvider = ({ children }) => {
         const { data } = res;
         const { totals_credit_debit_transactions } = data;
         return totals_credit_debit_transactions;
+      } else {
+        toast.error("Responded with status" + res.status);
       }
     } catch (error) {
       toast.error(error.message);

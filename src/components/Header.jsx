@@ -3,6 +3,7 @@ import { IoIosAdd } from "react-icons/io";
 
 import AddTransactionModal from "./AddTransactionModal";
 import TransactionOption from "./TransactionOption";
+import { DASHBOARD_ROUTE, TAB_OPTIONS, TRANSACTION_ROUTE } from "../contants";
 
 const Header = () => {
   const path = window.location.pathname;
@@ -10,17 +11,40 @@ const Header = () => {
 
   const renderHeaderName = () => {
     switch (path) {
-      case "/dashboard":
+      case DASHBOARD_ROUTE:
         return <p className="font-semibold text-xl">Accounts</p>;
 
-      case "/transactions":
+      case TRANSACTION_ROUTE:
         return <p className="font-semibold text-xl">Transactions</p>;
       default:
         break;
     }
   };
 
-  const options = ["transactions", "credit", "debit"];
+  const options = TAB_OPTIONS;
+
+  const renderTabs = () => {
+    if (path === TRANSACTION_ROUTE) {
+      return (
+        <ul
+          style={{ color: "rgba(113, 142, 191, 1)" }}
+          className="flex items-center gap-6 text-sm absolute bottom-0 "
+        >
+          {options.map((option) => (
+            <TransactionOption key={option} option={option} />
+          ))}
+        </ul>
+      );
+    }
+  };
+
+  const renderAddTransaction = () => {
+    if (addTransactionModal) {
+      return (
+        <AddTransactionModal onClose={() => setAddTransactionModal(false)} />
+      );
+    }
+  };
 
   return (
     <header className="min-h-[80px] py-4 px-4 border-b-2 relative">
@@ -35,20 +59,8 @@ const Header = () => {
         </button>
       </div>
 
-      {path === "/transactions" && (
-        <ul
-          style={{ color: "rgba(113, 142, 191, 1)" }}
-          className="flex items-center gap-6 text-sm absolute bottom-0 "
-        >
-          {options.map((option) => (
-            <TransactionOption key={option} option={option} />
-          ))}
-        </ul>
-      )}
-
-      {addTransactionModal && (
-        <AddTransactionModal onClose={() => setAddTransactionModal(false)} />
-      )}
+      {renderTabs()}
+      {renderAddTransaction()}
     </header>
   );
 };
