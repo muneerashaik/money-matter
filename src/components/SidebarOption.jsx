@@ -12,7 +12,7 @@ const SidebarOption = ({ option }) => {
 
   const { isAdmin } = useContext(UserContext);
   const currentPath = "/" + option;
-  console.log(isAdmin);
+
   const transactionTabName = SIDEBAR_OPTIONS.transactions;
 
   const renderOption = () => {

@@ -18,8 +18,8 @@ import { UserContext } from "../context/userContext";
 import ErrorPage from "../components/ErrorPage";
 
 const Transactions = () => {
-  const [alertModal, setAlertModal] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const {
     activeTab,
     transactions,
@@ -46,7 +46,7 @@ const Transactions = () => {
 
   const handleTransactionDelete = async () => {
     try {
-      setDeleteLoading(true);
+      setIsDeleteLoading(true);
       const url = API_DELETE_TRANSACTION + deleteTransactionId;
       const res = await axios.delete(url, {
         headers: TRANSACTION_HEADERS(userId),
@@ -60,10 +60,10 @@ const Transactions = () => {
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setDeleteLoading(false);
+      setIsDeleteLoading(false);
       setDeleteTransactionId("");
       setTimeout(() => {
-        setAlertModal(false);
+        setShowAlertModal(false);
       }, 1000);
     }
   };
@@ -85,7 +85,7 @@ const Transactions = () => {
             }}
             setEditTransactionData={setEditTransactionData}
             setShowEditTransactionModal={setShowEditTransactionModal}
-            setAlertModal={setAlertModal}
+            setShowAlertModal={setShowAlertModal}
             setDeleteTransactionId={setDeleteTransactionId}
           />
         );
@@ -117,12 +117,12 @@ const Transactions = () => {
   };
 
   const renderConfirmModal = () => {
-    if (alertModal) {
+    if (showAlertModal) {
       return (
         <ConfirmModal
-          toggleModal={() => setAlertModal(false)}
+          toggleModal={() => setShowAlertModal(false)}
           setActionId={setDeleteTransactionId}
-          isLoading={deleteLoading}
+          isLoading={isDeleteLoading}
           action={ACTION_TYPES.delete}
           actionHandler={() => handleTransactionDelete()}
         />

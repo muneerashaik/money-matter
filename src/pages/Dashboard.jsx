@@ -83,7 +83,7 @@ const Dashboard = () => {
           }}
           setEditTransactionData={setEditTransactionData}
           setShowEditTransactionModal={setShowEditTransactionModal}
-          setAlertModal={setAlertModal}
+          setShowAlertModal={setShowAlertModal}
           setDeleteTransactionId={setDeleteTransactionId}
         />
       );

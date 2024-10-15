@@ -12,7 +12,7 @@ const TransactionItem = ({
   data,
   setEditTransactionData,
   setShowEditTransactionModal,
-  setAlertModal,
+  setShowAlertModal,
   setDeleteTransactionId,
 }) => {
   const { transaction_name, id, category, amount, date, type } = data;
@@ -37,7 +37,7 @@ const TransactionItem = ({
         </button>
         <button
           onClick={() => {
-            setAlertModal(true);
+            setShowAlertModal(true);
             setDeleteTransactionId(id);
           }}
         >
