@@ -7,18 +7,19 @@ export const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }) => {
   const [userId, setUserId] = useState(null);
-  const { admin: isAdmin } = JSON.parse(localStorage.getItem("userData"));
+
   const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
+  const isAdmin = userData?.admin;
 
   useEffect(() => {
     if (!localStorage.getItem(LOCALSTORAGE_KEY)) {
       navigate(LOGIN_ROUTE, { replace: true });
     } else {
-      const userData = JSON.parse(localStorage.getItem(LOCALSTORAGE_KEY));
       const { userId } = userData;
       setUserId(userId);
     }
-  }, [userId]);
+  }, [userData.userId]);
 
   if (userId) {
     return (

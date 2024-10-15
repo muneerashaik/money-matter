@@ -5,6 +5,7 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import { TransactionContextProvider } from "../context/transactionContext";
 import { DASHBOARD_ROUTE } from "../contants";
+import { UserContextProvider } from "../context/userContext";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -14,15 +15,17 @@ const Home = () => {
   }, []);
 
   return (
-    <TransactionContextProvider>
-      <div className="relative">
-        <Sidebar />
-        <div className="ml-[200px]">
-          <Header />
-          <Outlet />
+    <UserContextProvider>
+      <TransactionContextProvider>
+        <div className="relative">
+          <Sidebar />
+          <div className="ml-[200px]">
+            <Header />
+            <Outlet />
+          </div>
         </div>
-      </div>
-    </TransactionContextProvider>
+      </TransactionContextProvider>
+    </UserContextProvider>
   );
 };
 

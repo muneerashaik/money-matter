@@ -17,17 +17,15 @@ import { UserContextProvider } from "./context/userContext";
 const App = () => {
   return (
     <BrowserRouter>
-      <UserContextProvider>
-        <Routes>
-          <Route path={LOGIN_ROUTE} element={<Login admin={false} />} />
-          <Route path={ADMIN_LOGIN_ROUTE} element={<Login admin={true} />} />
-          <Route path={HOME_ROUTE} element={<Home />}>
-            <Route path={TRANSACTION_ROUTE} element={<Transactions />} />
-            <Route path={DASHBOARD_ROUTE} element={<Dashboard />} />
-          </Route>
-        </Routes>
-        <Toaster reverseOrder={false} position="top-center" />
-      </UserContextProvider>
+      <Routes>
+        <Route path={LOGIN_ROUTE} element={<Login admin={false} />} />
+        <Route path={ADMIN_LOGIN_ROUTE} element={<Login admin={true} />} />
+        <Route path={HOME_ROUTE} element={<Home />}>
+          <Route path={TRANSACTION_ROUTE} element={<Transactions />} />
+          <Route path={DASHBOARD_ROUTE} element={<Dashboard />} />
+        </Route>
+      </Routes>
+      <Toaster reverseOrder={false} position="top-center" />
     </BrowserRouter>
   );
 };

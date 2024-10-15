@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -7,7 +7,6 @@ import { IoMdMail } from "react-icons/io";
 import { RiLock2Line } from "react-icons/ri";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
-import { UserContext } from "../context/userContext";
 import {
   API_GET_USER_ID,
   DASHBOARD_ROUTE,
@@ -17,7 +16,6 @@ import {
 
 const Login = ({ admin }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const { setUserId } = useContext(UserContext);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -81,7 +79,7 @@ const Login = ({ admin }) => {
               userId: data.get_user_id[0].id,
             })
           );
-          setUserId(data.get_user_id[0].id);
+
           toast.success("Login successful", { duration: 1000 });
 
           setTimeout(() => {
