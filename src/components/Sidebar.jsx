@@ -59,8 +59,6 @@ const Sidebar = () => {
     }
   };
 
-  const options = SIDEBAR_OPTIONS;
-
   const renderHeader = () => {
     return (
       <h1
@@ -78,7 +76,7 @@ const Sidebar = () => {
   const renderOptions = () => {
     return (
       <ul className="flex flex-col w-full mt-6">
-        {options.map((option) => (
+        {SIDEBAR_OPTIONS.map((option) => (
           <SidebarOption key={option} option={option} />
         ))}
       </ul>

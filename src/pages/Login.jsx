@@ -8,7 +8,12 @@ import { RiLock2Line } from "react-icons/ri";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 import { UserContext } from "../context/userContext";
-import { API_GET_USER_ID, X_HASURA_ADMIN_SECRET } from "../contants";
+import {
+  API_GET_USER_ID,
+  DASHBOARD_ROUTE,
+  LOCALSTORAGE_KEY,
+  X_HASURA_ADMIN_SECRET,
+} from "../contants";
 
 const Login = ({ admin }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -22,8 +27,8 @@ const Login = ({ admin }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("userData")) {
-      navigate("/dashboard");
+    if (localStorage.getItem(LOCALSTORAGE_KEY)) {
+      navigate(DASHBOARD_ROUTE);
     }
   }, []);
 
@@ -72,7 +77,7 @@ const Login = ({ admin }) => {
             email: "",
           });
           localStorage.setItem(
-            "userData",
+            LOCALSTORAGE_KEY,
             JSON.stringify({
               admin: admin,
               userId: data.get_user_id[0].id,
@@ -82,8 +87,10 @@ const Login = ({ admin }) => {
           toast.success("Login successful", { duration: 1000 });
 
           setTimeout(() => {
-            navigate("/dashboard");
+            navigate(DASHBOARD_ROUTE);
           }, 1000);
+        } else {
+          toast.error("Responded with status code" + response.status);
         }
       }
     } catch (error) {

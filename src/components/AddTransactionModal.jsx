@@ -9,9 +9,16 @@ import LoadingButton from "./LoadingButton";
 import { UserContext } from "../context/userContext";
 import {
   API_ADD_TRANSACTION,
+  CATEGORY_OPTIONS,
+  TRANSACTION_TYPES,
   X_HASURA_ADMIN_SECRET,
   X_HASURA_ROLE,
 } from "../contants";
+import InputContainer, {
+  InputElement,
+  InputLabel,
+  SelectInput,
+} from "./InputContainer";
 
 const AddTransactionModal = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -134,34 +141,34 @@ const AddTransactionModal = ({ onClose }) => {
           onSubmit={handleAddTransaction}
           className="flex flex-col gap-3 mt-3"
         >
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-slate-600">
-              Transaction Name
-            </label>
-            <input
+          <InputContainer>
+            <InputLabel name="Transaction Name" />
+            <InputElement
               required
               name="name"
               type="text"
-              className="border-2 text-sm pl-2 rounded-lg h-[46px] text-slate-800 placeholder:font-medium outline-none"
               placeholder="Enter Name"
               onChange={handleChange}
               value={formData.name}
             />
-          </div>
+          </InputContainer>
+
           <div className="relative flex flex-col gap-1">
-            <label className="text-sm font-medium text-slate-600">
-              Transaction Type
-            </label>
-            <select
+            <InputLabel name="Transaction Type" />
+            <SelectInput
               name="type"
               onChange={handleChange}
               value={formData.type}
-              className="border-2 text-sm px-2 appearance-none rounded-lg h-[46px] text-slate-800 outline-none w-full"
             >
-              <option value="">Select Transaction Type</option>
-              <option value="credit">Credit</option>
-              <option value="debit">Debit</option>
-            </select>
+              {TRANSACTION_TYPES.map((option) => {
+                const { name, value } = option;
+                return (
+                  <option key={value} value={value}>
+                    {name}
+                  </option>
+                );
+              })}
+            </SelectInput>
 
             <div className="pointer-events-none absolute top-9 right-3 flex items-center text-slate-600">
               <FiChevronDown className="w-5 h-5" />
@@ -169,52 +176,50 @@ const AddTransactionModal = ({ onClose }) => {
           </div>
 
           <div className="relative flex flex-col gap-1">
-            <label className="text-sm font-medium text-slate-600">
-              Category
-            </label>
-            <select
+            <InputLabel name="Category" />
+            <SelectInput
               onChange={handleChange}
               value={formData.category}
               name="category"
-              className="border-2 appearance-none text-sm px-2 rounded-lg h-[46px]  text-slate-800 outline-none"
             >
-              <option value="">Select Category</option>
-              <option className="" value="food">
-                Food
-              </option>
-              <option value="shopping">Shopping</option>
-              <option value="entertainment">Entertainment</option>
-            </select>
+              {CATEGORY_OPTIONS.map((option) => {
+                const { name, value } = option;
+                return (
+                  <option key={value} value={value}>
+                    {name}
+                  </option>
+                );
+              })}
+            </SelectInput>
 
             <div className="pointer-events-none absolute top-9 right-3 flex items-center text-slate-600">
               <FiChevronDown className="w-5 h-5" />
             </div>
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-slate-600">Amount</label>
-            <input
+          <InputContainer>
+            <InputLabel name="Amount" />
+            <InputElement
               required
               onChange={handleChange}
               value={formData.amount}
               type="number"
               name="amount"
-              className="border-2 text-sm pl-2 rounded-lg h-[46px] text-slate-800 placeholder:font-medium outline-none"
               placeholder="Enter Amount"
             />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-slate-600">Date</label>
-            <input
+          </InputContainer>
+
+          <InputContainer>
+            <InputLabel name="Date" />
+            <InputElement
               required
               type="datetime-local"
-              className="border-2 text-sm pl-2 rounded-lg h-[46px] text-slate-800 placeholder:font-medium outline-none"
               placeholder="Enter Date"
               onChange={handleChange}
               value={formData.date}
               name="date"
             />
-          </div>
+          </InputContainer>
 
           <LoadingButton action={"add"} isLoading={addLoading} />
         </form>

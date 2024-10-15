@@ -27,3 +27,16 @@ export const NUMBER_OF_TRANSACTIONS = 3;
 export const LOCALSTORAGE_KEY = "userData";
 export const INITIAL_ACTIVE_TAB = "transactions";
 export const TAB_OPTIONS = ["transactions", "credit", "debit"];
+
+export const CATEGORY_OPTIONS = [
+  { value: "", name: "Select Category" },
+  { value: "food", name: "Food" },
+  { value: "shopping", name: "Shopping" },
+  { value: "entertainment", name: "Entertainment" },
+];
+
+export const TRANSACTION_TYPES = [
+  { value: "", name: "Select Transaction Type" },
+  { value: "credit", name: "Credit" },
+  { value: "debit", name: "Debit" },
+];
