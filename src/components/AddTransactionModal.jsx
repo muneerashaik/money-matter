@@ -44,7 +44,9 @@ const AddTransactionModal = ({ onClose }) => {
 
   const transactionValidation = () => {
     const { name, category, date, type, amount } = formData;
-    if (name === "") {
+    const trimmedName = name.trim();
+
+    if (trimmedName === "") {
       toast.error("Please enter name");
       return false;
     } else if (category === "") {

@@ -68,3 +68,5 @@ export const ACTION_TYPES = {
   edit: "edit",
   add: "add",
 };
+
+export const DATE_FORMAT = "DD MMM YY, hh:mm A";

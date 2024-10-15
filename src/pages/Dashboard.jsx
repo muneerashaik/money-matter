@@ -36,14 +36,14 @@ const Dashboard = () => {
     id: "",
   });
 
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
 
-  const [alertModal, setAlertModal] = useState(false);
+  const [showAlertModal, setShowAlertModal] = useState(false);
   const { userId } = useContext(UserContext);
 
   const handleTransactionDelete = async () => {
     try {
-      setDeleteLoading(true);
+      setIsDeleteLoading(true);
       const url = API_DELETE_TRANSACTION + deleteTransactionId;
 
       const res = await axios.delete(url, {
@@ -60,7 +60,7 @@ const Dashboard = () => {
       toast.error(error.message);
     } finally {
       setDeleteTransactionId("");
-      setDeleteLoading(false);
+      setIsDeleteLoading(false);
       setTimeout(() => {
         setAlertModal(false);
       }, 1000);
@@ -91,12 +91,12 @@ const Dashboard = () => {
   );
 
   const renderAlertModal = () => {
-    if (alertModal) {
+    if (showAlertModal) {
       return (
         <ConfirmModal
-          toggleModal={() => setAlertModal(false)}
+          toggleModal={() => setShowAlertModal(false)}
           setActionId={setDeleteTransactionId}
-          actionLoading={deleteLoading}
+          actionLoading={isDeleteLoading}
           action={"delete"}
           actionHandler={() => handleTransactionDelete()}
         />

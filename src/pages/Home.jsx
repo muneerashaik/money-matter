@@ -10,10 +10,6 @@ import { UserContextProvider } from "../context/userContext";
 const Home = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    navigate(DASHBOARD_ROUTE);
-  }, []);
-
   return (
     <UserContextProvider>
       <TransactionContextProvider>

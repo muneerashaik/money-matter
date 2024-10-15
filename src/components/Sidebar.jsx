@@ -12,6 +12,7 @@ import {
   ACTION_TYPES,
   API_PROFILE_URL,
   LOCALSTORAGE_KEY,
+  LOGIN_ROUTE,
   SIDEBAR_OPTIONS,
   TRANSACTION_HEADERS,
 } from "../contants";
@@ -20,7 +21,6 @@ const Sidebar = () => {
   const [alertModal, setAlertModal] = useState(false);
   const [userData, setUserData] = useState(null);
   const [logoutLoading, setLogoutLoading] = useState(false);
-
   const { userId } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -39,9 +39,7 @@ const Sidebar = () => {
     }
   };
   useEffect(() => {
-    if (userId) {
-      fetchUserProfile();
-    }
+    fetchUserProfile();
   }, [userId]);
 
   const handleLogout = () => {
@@ -49,7 +47,7 @@ const Sidebar = () => {
       setLogoutLoading(true);
       localStorage.removeItem(LOCALSTORAGE_KEY);
       toast.success("Logout successful", { duration: 1000 });
-      navigate("/login");
+      navigate(LOGIN_ROUTE);
     } catch (error) {
       toast.error(error.message);
     }

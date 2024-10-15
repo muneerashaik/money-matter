@@ -36,10 +36,12 @@ const Login = ({ admin }) => {
 
   const handleValidation = () => {
     const { password, email } = formData;
-    if (email === "") {
+    const trimEmail = email.trim();
+    const trimPassword = password.trim();
+    if (trimEmail === "") {
       toast.error("Please enter email !", { duration: 1000 });
       return false;
-    } else if (password === "") {
+    } else if (trimPassword === "") {
       toast.error("Please enter password!", { duration: 1000 });
       return false;
     }
@@ -147,6 +149,7 @@ const Login = ({ admin }) => {
         <div className="flex items-center border-2 border-gray-300 rounded-lg h-12 pl-2 transition focus-within:border-blue-500">
           <IoMdMail className="mr-2" size={20} />
           <input
+            required
             onChange={handleChange}
             name="email"
             value={formData.email}
@@ -166,6 +169,7 @@ const Login = ({ admin }) => {
         <div className="flex items-center border-2 border-gray-300 rounded-lg h-12 pl-2 transition focus-within:border-blue-500">
           <RiLock2Line className="mr-2" size={20} />
           <input
+            required
             onChange={handleChange}
             name="password"
             value={formData.password}

@@ -12,6 +12,8 @@ const SidebarOption = ({ option }) => {
 
   const { isAdmin } = useContext(UserContext);
   const currentPath = "/" + option;
+  console.log(isAdmin);
+  const transactionTabName = SIDEBAR_OPTIONS.transactions;
 
   const renderOption = () => {
     if (SIDEBAR_OPTIONS.dashboard === option) {
@@ -21,12 +23,12 @@ const SidebarOption = ({ option }) => {
           <p className="font-medium text-base">Dashboard</p>
         </>
       );
-    } else if (SIDEBAR_OPTIONS.transactions === option) {
+    } else if (transactionTabName === option) {
       return (
         <>
           <TbReceiptDollar className="text-xl" />
-          <p className="font-medium text-base">
-            {isAdmin ? "All Transactions" : "Transactions"}
+          <p className="font-medium text-base first-letter:capitalize">
+            {isAdmin ? "All " + transactionTabName : transactionTabName}
           </p>
         </>
       );

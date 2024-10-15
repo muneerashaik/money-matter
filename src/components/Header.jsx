@@ -7,7 +7,7 @@ import { DASHBOARD_ROUTE, TAB_OPTIONS, TRANSACTION_ROUTE } from "../contants";
 
 const Header = () => {
   const path = window.location.pathname;
-  const [addTransactionModal, setAddTransactionModal] = useState(false);
+  const [showAddTransactionModal, setShowAddTransactionModal] = useState(false);
 
   const renderHeaderName = () => {
     switch (path) {
@@ -38,29 +38,37 @@ const Header = () => {
     }
   };
 
-  const renderAddTransaction = () => {
-    if (addTransactionModal) {
+  const renderAddTransactionModal = () => {
+    if (showAddTransactionModal) {
       return (
-        <AddTransactionModal onClose={() => setAddTransactionModal(false)} />
+        <AddTransactionModal
+          onClose={() => setShowAddTransactionModal(false)}
+        />
       );
     }
+  };
+
+  const renderAddTransactionButton = () => {
+    return (
+      <button
+        onClick={() => setShowAddTransactionModal(true)}
+        className="bg-blue-600 text-white rounded-lg flex items-center p-1 pr-2"
+      >
+        <IoIosAdd className="text-2xl" />{" "}
+        <span className="text-xs">Add Transaction</span>
+      </button>
+    );
   };
 
   return (
     <header className="min-h-[80px] py-4 px-4 border-b-2 relative">
       <div className="flex items-center justify-between">
         {renderHeaderName()}
-        <button
-          onClick={() => setAddTransactionModal(true)}
-          className="bg-blue-600 text-white rounded-lg flex items-center p-1 pr-2"
-        >
-          <IoIosAdd className="text-2xl" />{" "}
-          <span className="text-xs">Add Transaction</span>
-        </button>
+        {renderAddTransactionButton()}
       </div>
 
       {renderTabs()}
-      {renderAddTransaction()}
+      {renderAddTransactionModal()}
     </header>
   );
 };

@@ -6,7 +6,7 @@ import {
 } from "react-icons/io5";
 import { MdDeleteOutline, MdOutlineModeEdit } from "react-icons/md";
 
-import { TRANSACTION_TYPES_OBJECT } from "../contants";
+import { DATE_FORMAT, TRANSACTION_TYPES_OBJECT } from "../contants";
 
 const TransactionItem = ({
   data,
@@ -74,7 +74,7 @@ const TransactionItem = ({
           {category}
         </p>
         <p className="text-slate-400  w-[30%]">
-          {dayjs(date).format("DD MMM YY, hh:mm A")}
+          {dayjs(date).format(DATE_FORMAT)}
         </p>
 
         <p className="font-semibold w-1/4">{renderTransactionAmount()}</p>

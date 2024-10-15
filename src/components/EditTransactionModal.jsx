@@ -31,16 +31,13 @@ const EditTransactionModal = ({ onClose, data }) => {
     date: "",
     id: "",
   });
-  const [editLoading, setEditLoading] = useState(false);
+  const [isEditLoading, setIsEditLoading] = useState(false);
   const { transactionsMutate, totalDebitCreditTransactionsMutate } =
     useContext(TransactionContext);
   const { userId } = useContext(UserContext);
 
   useEffect(() => {
     setIsVisible(true); // Trigger the animation when modal is mounted
-  }, []);
-
-  useEffect(() => {
     setFormData({
       ...data,
       date: dayjs(new Date(data.date)).format("YYYY-MM-DDThh:mm"),
@@ -53,7 +50,8 @@ const EditTransactionModal = ({ onClose, data }) => {
 
   const transactionValidation = () => {
     const { name, category, date, type, amount } = formData;
-    if (!name) {
+    const trimmedName = name.trim();
+    if (!trimmedName) {
       toast.error("Please enter name");
       return false;
     } else if (!category) {
@@ -69,14 +67,13 @@ const EditTransactionModal = ({ onClose, data }) => {
       toast.error("Please enter amount");
       return false;
     }
-
     return true;
   };
 
   const handleEditTransaction = async (e) => {
+    e.preventDefault();
     try {
-      setEditLoading(true);
-      e.preventDefault();
+      setIsEditLoading(true);
       if (transactionValidation()) {
         const { name, category, date, type, amount, id } = formData;
         const url = API_UPDATE_TRANSACTION;
@@ -114,7 +111,7 @@ const EditTransactionModal = ({ onClose, data }) => {
     } catch (error) {
       toast.error(error.message);
     } finally {
-      setEditLoading(false);
+      setIsEditLoading(false);
     }
   };
 
@@ -227,7 +224,7 @@ const EditTransactionModal = ({ onClose, data }) => {
             />
           </InputContainer>
 
-          <LoadingButton action={ACTION_TYPES.edit} isLoading={editLoading} />
+          <LoadingButton action={ACTION_TYPES.edit} isLoading={isEditLoading} />
         </form>
       </div>
     </div>

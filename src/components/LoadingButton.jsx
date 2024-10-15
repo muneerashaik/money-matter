@@ -14,12 +14,9 @@ const LoadingButton = ({ action, isLoading }) => {
     }
   };
 
-  return (
-    <button
-      type="submit"
-      className="flex justify-center items-center mt-5  bg-blue-500 text-white font-medium text-sm rounded-lg h-12 w-full "
-    >
-      {isLoading ? (
+  const renderButtonContent = () => {
+    if (isLoading) {
+      return (
         <TailSpin
           visible={true}
           height="30"
@@ -30,9 +27,18 @@ const LoadingButton = ({ action, isLoading }) => {
           wrapperStyle={{}}
           wrapperClass=""
         />
-      ) : (
-        renderButtonText()
-      )}
+      );
+    } else {
+      return renderButtonText();
+    }
+  };
+
+  return (
+    <button
+      type="submit"
+      className="flex justify-center items-center mt-5  bg-blue-500 text-white font-medium text-sm rounded-lg h-12 w-full "
+    >
+      {renderButtonContent()}
     </button>
   );
 };
