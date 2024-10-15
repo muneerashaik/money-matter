@@ -5,6 +5,7 @@ import {
   IoArrowUpCircleOutline,
 } from "react-icons/io5";
 import { MdDeleteOutline, MdOutlineModeEdit } from "react-icons/md";
+
 import { TRANSACTION_TYPES_OBJECT } from "../contants";
 
 const TransactionItem = ({
@@ -68,11 +69,11 @@ const TransactionItem = ({
     >
       {renderTransactionIcon()}
       <p className="flex-grow">{transaction_name}</p>
-      <div className="flex items-start justify-between gap-3 max-w-[500px] w-2/4">
+      <div className="flex items-start justify-between gap-3 max-w-[500px] w-2/4 text-xs lg:text-sm">
         <p className="text-slate-400 w-1/4 first-letter:capitalize whitespace-normal">
           {category}
         </p>
-        <p className="text-slate-400 w-[30%]">
+        <p className="text-slate-400  w-[30%]">
           {dayjs(date).format("DD MMM YY, hh:mm A")}
         </p>
 

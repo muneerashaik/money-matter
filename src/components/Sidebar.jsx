@@ -14,8 +14,6 @@ import {
   LOCALSTORAGE_KEY,
   SIDEBAR_OPTIONS,
   TRANSACTION_HEADERS,
-  X_HASURA_ADMIN_SECRET,
-  X_HASURA_ROLE,
 } from "../contants";
 
 const Sidebar = () => {
