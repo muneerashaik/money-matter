@@ -13,6 +13,7 @@ import {
   API_PROFILE_URL,
   LOCALSTORAGE_KEY,
   SIDEBAR_OPTIONS,
+  TRANSACTION_HEADERS,
   X_HASURA_ADMIN_SECRET,
   X_HASURA_ROLE,
 } from "../contants";
@@ -29,11 +30,7 @@ const Sidebar = () => {
     try {
       const url = API_PROFILE_URL;
       const res = await axios.get(url, {
-        headers: {
-          "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
-          "x-hasura-role": X_HASURA_ROLE,
-          "x-hasura-user-id": userId,
-        },
+        headers: TRANSACTION_HEADERS(userId),
       });
 
       if (res.status === 200) {

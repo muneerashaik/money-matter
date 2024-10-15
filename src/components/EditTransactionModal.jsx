@@ -14,8 +14,6 @@ import {
   CATEGORY_OPTIONS,
   TRANSACTION_HEADERS,
   TRANSACTION_TYPES,
-  X_HASURA_ADMIN_SECRET,
-  X_HASURA_ROLE,
 } from "../contants";
 import InputContainer, {
   InputElement,
