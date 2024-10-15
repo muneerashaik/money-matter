@@ -10,8 +10,6 @@ import {
   INITIAL_ACTIVE_TAB,
   NUMBER_OF_TRANSACTIONS,
   TRANSACTION_HEADERS,
-  X_HASURA_ADMIN_SECRET,
-  X_HASURA_ROLE,
 } from "../contants";
 
 export const TransactionContext = createContext();

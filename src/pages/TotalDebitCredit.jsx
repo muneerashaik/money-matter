@@ -18,9 +18,21 @@ const TotalDebitCredit = () => {
 
   const renderImage = (type) => {
     if (type === TRANSACTION_TYPES_OBJECT.credit) {
-      return <img className="h-24" src={creditImage} alt="credit" />;
+      return (
+        <img
+          className="h-24"
+          src={creditImage}
+          alt={TRANSACTION_TYPES_OBJECT.credit}
+        />
+      );
     } else {
-      return <img className="h-24" src={debitImage} alt="credit" />;
+      return (
+        <img
+          className="h-24"
+          src={debitImage}
+          alt={TRANSACTION_TYPES_OBJECT.debit}
+        />
+      );
     }
   };
 
@@ -33,6 +45,7 @@ const TotalDebitCredit = () => {
       ) : (
         <div className="flex items-center gap-4 justify-around mx-auto">
           {totalDebitCreditTransactionsData?.map((total, index) => {
+            const { type, sum } = total;
             return (
               <div
                 key={index}
@@ -42,22 +55,22 @@ const TotalDebitCredit = () => {
                   <p
                     className="text-3xl font-semibold"
                     style={
-                      total.type === TRANSACTION_TYPES_OBJECT.credit
+                      type === TRANSACTION_TYPES_OBJECT.credit
                         ? { color: "rgba(22, 219, 170, 1)" }
                         : { color: "rgba(254, 92, 115, 1)" }
                     }
                   >
-                    ${total.sum}
+                    ${sum}
                   </p>
                   <p
                     className="text-sm"
                     style={{ color: "rgba(113, 142, 191, 1)" }}
                   >
-                    {total.type}
+                    {type}
                   </p>
                 </div>
 
-                {renderImage(total.type)}
+                {renderImage(type)}
               </div>
             );
           })}
