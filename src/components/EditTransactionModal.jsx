@@ -9,8 +9,10 @@ import { TransactionContext } from "../context/transactionContext";
 import LoadingButton from "./LoadingButton";
 import { UserContext } from "../context/userContext";
 import {
+  ACTION_TYPES,
   API_UPDATE_TRANSACTION,
   CATEGORY_OPTIONS,
+  TRANSACTION_HEADERS,
   TRANSACTION_TYPES,
   X_HASURA_ADMIN_SECRET,
   X_HASURA_ROLE,
@@ -91,11 +93,7 @@ const EditTransactionModal = ({ onClose, data }) => {
             id,
           },
           {
-            headers: {
-              "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
-              "x-hasura-role": X_HASURA_ROLE,
-              "x-hasura-user-id": userId,
-            },
+            headers: TRANSACTION_HEADERS(userId),
           }
         );
 
@@ -231,7 +229,7 @@ const EditTransactionModal = ({ onClose, data }) => {
             />
           </InputContainer>
 
-          <LoadingButton action={"edit"} isLoading={editLoading} />
+          <LoadingButton action={ACTION_TYPES.edit} isLoading={editLoading} />
         </form>
       </div>
     </div>

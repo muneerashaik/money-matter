@@ -9,6 +9,7 @@ import ConfirmModal from "./ConfirmModal";
 import { UserContext } from "../context/userContext";
 import { useNavigate } from "react-router-dom";
 import {
+  ACTION_TYPES,
   API_PROFILE_URL,
   LOCALSTORAGE_KEY,
   SIDEBAR_OPTIONS,
@@ -74,9 +75,10 @@ const Sidebar = () => {
   };
 
   const renderOptions = () => {
+    const options = Object.keys(SIDEBAR_OPTIONS);
     return (
       <ul className="flex flex-col w-full mt-6">
-        {SIDEBAR_OPTIONS.map((option) => (
+        {options.map((option) => (
           <SidebarOption key={option} option={option} />
         ))}
       </ul>
@@ -116,8 +118,8 @@ const Sidebar = () => {
       return (
         <ConfirmModal
           toggleModal={() => setAlertModal(false)}
-          actionLoading={logoutLoading}
-          action="logout"
+          isLoading={logoutLoading}
+          action={ACTION_TYPES.logout}
           actionHandler={handleLogout}
         />
       );

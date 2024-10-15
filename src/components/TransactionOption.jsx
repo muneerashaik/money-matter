@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from "react";
 
 import { TransactionContext } from "../context/transactionContext";
+import { TAB_OPTIONS } from "../contants";
 
 const TransactionOption = ({ option }) => {
   const { setActiveTab, activeTab } = useContext(TransactionContext);
@@ -26,7 +27,7 @@ const TransactionOption = ({ option }) => {
       }}
     >
       <p className="pb-2 first-letter:capitalize">
-        {option === "transactions" && "All "}
+        {option === TAB_OPTIONS.transactions && "All "}
         <span className="">{option}</span>
       </p>
       {renderPointer()}

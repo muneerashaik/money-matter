@@ -5,6 +5,7 @@ import {
   IoArrowUpCircleOutline,
 } from "react-icons/io5";
 import { MdDeleteOutline, MdOutlineModeEdit } from "react-icons/md";
+import { TRANSACTION_TYPES_OBJECT } from "../contants";
 
 const TransactionItem = ({
   data,
@@ -46,7 +47,7 @@ const TransactionItem = ({
   };
 
   const renderTransactionAmount = () => {
-    if (type === "credit") {
+    if (type === TRANSACTION_TYPES_OBJECT.credit) {
       return <span className="text-green-500">+${amount}</span>;
     } else {
       return <span className="text-red-500">-${amount}</span>;
@@ -54,7 +55,7 @@ const TransactionItem = ({
   };
 
   const renderTransactionIcon = () => {
-    if (type === "credit") {
+    if (type === TRANSACTION_TYPES_OBJECT.credit) {
       return <IoArrowUpCircleOutline className="text-xl text-green-500" />;
     } else {
       return <IoArrowDownCircleOutline className="text-xl text-red-500" />;

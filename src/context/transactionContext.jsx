@@ -9,13 +9,14 @@ import {
   API_TOTAL_DEBIT_CREDIT_TRANSACTIONS,
   INITIAL_ACTIVE_TAB,
   NUMBER_OF_TRANSACTIONS,
+  TRANSACTION_HEADERS,
   X_HASURA_ADMIN_SECRET,
   X_HASURA_ROLE,
 } from "../contants";
 
 export const TransactionContext = createContext();
 
-const userValidation = () => {
+const getUserDetails = () => {
   const { userId } = useContext(UserContext);
   if (!userId) {
     throw new Error("userId is not defined");
@@ -26,7 +27,7 @@ const userValidation = () => {
 
 export const TransactionContextProvider = ({ children }) => {
   const [activeTab, setActiveTab] = useState(INITIAL_ACTIVE_TAB);
-  const { userId } = userValidation();
+  const { userId } = getUserDetails();
   const [showEditTransactionModal, setShowEditTransactionModal] =
     useState(false);
   const [deleteTransactionId, setDeleteTransactionId] = useState(null);
@@ -42,9 +43,7 @@ export const TransactionContextProvider = ({ children }) => {
         },
         headers: {
           "Content-Type": "application/json",
-          "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
-          "x-hasura-role": X_HASURA_ROLE,
-          "x-hasura-user-id": userId,
+          ...TRANSACTION_HEADERS(userId),
         },
       });
       if (res.status === 200) {
@@ -72,9 +71,7 @@ export const TransactionContextProvider = ({ children }) => {
       const res = await axios.get(url, {
         headers: {
           "Content-Type": "application/json",
-          "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
-          "x-hasura-role": X_HASURA_ROLE,
-          "x-hasura-user-id": userId,
+          ...TRANSACTION_HEADERS(userId),
         },
       });
       if (res.status === 200) {

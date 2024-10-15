@@ -10,8 +10,8 @@ import Loader from "../components/Loader";
 import EmptyView from "../components/EmptyView";
 import {
   API_DELETE_TRANSACTION,
-  X_HASURA_ADMIN_SECRET,
-  X_HASURA_ROLE,
+  TAB_OPTIONS,
+  TRANSACTION_HEADERS,
 } from "../contants";
 import { UserContext } from "../context/userContext";
 import ErrorPage from "../components/ErrorPage";
@@ -47,13 +47,8 @@ const Transactions = () => {
     try {
       setDeleteLoading(true);
       const url = API_DELETE_TRANSACTION + deleteTransactionId;
-
       const res = await axios.delete(url, {
-        headers: {
-          "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
-          "x-hasura-role": X_HASURA_ROLE,
-          "x-hasura-user-id": userId,
-        },
+        headers: TRANSACTION_HEADERS(userId),
       });
 
       if (res.status === 200) {
@@ -75,7 +70,7 @@ const Transactions = () => {
   let transactionsData = [];
   transactions?.forEach(
     ({ transaction_name, id, category, amount, date, type }) => {
-      if (activeTab === "transactions" || activeTab === type) {
+      if (activeTab === TAB_OPTIONS.transactions || activeTab === type) {
         transactionsData.push(
           <TransactionItem
             key={id}
@@ -126,8 +121,8 @@ const Transactions = () => {
         <ConfirmModal
           toggleModal={() => setAlertModal(false)}
           setActionId={setDeleteTransactionId}
-          actionLoading={deleteLoading}
-          action={"delete"}
+          isLoading={deleteLoading}
+          action={ACTION_TYPES.delete}
           actionHandler={() => handleTransactionDelete()}
         />
       );

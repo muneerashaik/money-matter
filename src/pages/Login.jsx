@@ -12,7 +12,7 @@ import {
   API_GET_USER_ID,
   DASHBOARD_ROUTE,
   LOCALSTORAGE_KEY,
-  X_HASURA_ADMIN_SECRET,
+  LOGIN_HEADERS,
 } from "../contants";
 
 const Login = ({ admin }) => {
@@ -63,9 +63,7 @@ const Login = ({ admin }) => {
             email,
           },
           {
-            headers: {
-              "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
-            },
+            headers: LOGIN_HEADERS,
           }
         );
 

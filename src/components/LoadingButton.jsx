@@ -1,12 +1,13 @@
 import React from "react";
 import { TailSpin } from "react-loader-spinner";
+import { ACTION_TYPES } from "../contants";
 
 const LoadingButton = ({ action, isLoading }) => {
   const renderButtonText = () => {
     switch (action) {
-      case "edit":
+      case ACTION_TYPES.edit:
         return "Edit Transaction";
-      case "add":
+      case ACTION_TYPES.add:
         return "Add Transaction";
       default:
         break;

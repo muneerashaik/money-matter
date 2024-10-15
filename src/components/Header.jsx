@@ -21,7 +21,7 @@ const Header = () => {
     }
   };
 
-  const options = TAB_OPTIONS;
+  const options = Object.keys(TAB_OPTIONS);
 
   const renderTabs = () => {
     if (path === TRANSACTION_ROUTE) {

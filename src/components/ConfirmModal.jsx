@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { IoClose, IoWarningOutline } from "react-icons/io5";
 import { TailSpin } from "react-loader-spinner";
+import { ACTION_TYPES } from "../contants";
 
-const ConfirmModal = ({
-  toggleModal,
-  actionLoading,
-  action,
-  actionHandler,
-}) => {
+const ConfirmModal = ({ toggleModal, isLoading, action, actionHandler }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -16,7 +12,7 @@ const ConfirmModal = ({
 
   const renderActionHeading = () => {
     switch (action) {
-      case "delete":
+      case ACTION_TYPES.delete:
         return (
           <>
             <p className="font-semibold text-lg">
@@ -28,7 +24,7 @@ const ConfirmModal = ({
             </p>
           </>
         );
-      case "logout":
+      case ACTION_TYPES.logout:
         return (
           <>
             <p
@@ -58,9 +54,9 @@ const ConfirmModal = ({
   };
 
   const buttonText = () => {
-    if (action === "delete") {
+    if (action === ACTION_TYPES.delete) {
       return "Yes, Delete";
-    } else if (action === "logout") {
+    } else if (action === ACTION_TYPES.logout) {
       return "Yes, Logout";
     }
   };
@@ -72,7 +68,7 @@ const ConfirmModal = ({
           onClick={actionHandler}
           className="bg-red-600 text-white rounded-xl py-2 w-[120px] flex items-center justify-center"
         >
-          {actionLoading ? (
+          {isLoading ? (
             <TailSpin
               visible={true}
               height="20"

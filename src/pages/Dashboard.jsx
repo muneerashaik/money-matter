@@ -10,11 +10,7 @@ import Loader from "../components/Loader";
 import EmptyView from "../components/EmptyView";
 import ChartComponent from "./Chart";
 import { UserContext } from "../context/userContext";
-import {
-  API_DELETE_TRANSACTION,
-  X_HASURA_ADMIN_SECRET,
-  X_HASURA_ROLE,
-} from "../contants";
+import { API_DELETE_TRANSACTION, TRANSACTION_HEADERS } from "../contants";
 import ErrorPage from "../components/ErrorPage";
 import TotalDebitCredit from "./TotalDebitCredit";
 
@@ -51,11 +47,7 @@ const Dashboard = () => {
       const url = API_DELETE_TRANSACTION + deleteTransactionId;
 
       const res = await axios.delete(url, {
-        headers: {
-          "x-hasura-admin-secret": X_HASURA_ADMIN_SECRET,
-          "x-hasura-role": X_HASURA_ROLE,
-          "x-hasura-user-id": userId,
-        },
+        headers: TRANSACTION_HEADERS(userId),
       });
 
       if (res.status === 200) {
