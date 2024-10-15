@@ -62,7 +62,7 @@ export const TransactionContextProvider = ({ children }) => {
 
   const {
     data: transactions,
-    isLoading: transactionsLoading,
+    isLoading: isTransactionsLoading,
     mutate: transactionsMutate,
     error: transactionsError,
   } = useSWR(API_ALL_TRANSACTIONS, transactionsFetcher);
@@ -89,7 +89,7 @@ export const TransactionContextProvider = ({ children }) => {
 
   const {
     data: totalDebitCreditTransactionsData,
-    isLoading: totalDebitCreditTransactionsLoading,
+    isLoading: isTotalDebitCreditTransactionsLoading,
     mutate: totalDebitCreditTransactionsMutate,
     error: totalDebitCreditTransactionsError,
   } = useSWR(
@@ -99,7 +99,7 @@ export const TransactionContextProvider = ({ children }) => {
 
   let latestTransactions = [];
 
-  if (!transactionsLoading) {
+  if (!isTransactionsLoading) {
     latestTransactions = transactions
       ?.sort((first, second) => new Date(second.date) - new Date(first.date))
       .slice(0, NUMBER_OF_TRANSACTIONS);
@@ -111,11 +111,11 @@ export const TransactionContextProvider = ({ children }) => {
         activeTab,
         setActiveTab,
         latestTransactions,
-        transactionsLoading,
+        isTransactionsLoading,
         transactions,
         transactionsMutate,
         totalDebitCreditTransactionsData,
-        totalDebitCreditTransactionsLoading,
+        isTotalDebitCreditTransactionsLoading,
         totalDebitCreditTransactionsMutate,
         showEditTransactionModal,
         setShowEditTransactionModal,

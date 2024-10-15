@@ -20,10 +20,10 @@ const TransactionOption = ({ option }) => {
     <li
       ref={tabRef}
       style={option === activeTab ? { color: "rgba(45, 96, 255, 1)" } : {}}
+      className="w-fit relative cursor-pointer"
       onClick={() => {
         setActiveTab(option);
       }}
-      className="w-fit relative cursor-pointer"
     >
       <p className="pb-2 first-letter:capitalize">
         {option === "transactions" && "All "}

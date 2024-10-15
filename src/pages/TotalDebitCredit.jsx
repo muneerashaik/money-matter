@@ -7,7 +7,7 @@ import Loader from "../components/Loader";
 const TotalDebitCredit = () => {
   const {
     totalDebitCreditTransactionsData,
-    totalDebitCreditTransactionsLoading,
+    isTotalDebitCreditTransactionsLoading,
     totalDebitCreditTransactionsError,
   } = useContext(TransactionContext);
 
@@ -17,7 +17,7 @@ const TotalDebitCredit = () => {
 
   return (
     <div>
-      {totalDebitCreditTransactionsLoading ? (
+      {isTotalDebitCreditTransactionsLoading ? (
         <div className="flex items-center justify-center h-[100px]">
           <Loader />
         </div>

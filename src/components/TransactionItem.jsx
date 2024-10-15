@@ -15,6 +15,36 @@ const TransactionItem = ({
 }) => {
   const { transaction_name, id, category, amount, date, type } = data;
 
+  const renderButtons = () => {
+    return (
+      <>
+        <button
+          onClick={() => {
+            setEditTransactionData({
+              category,
+              amount,
+              date,
+              name: transaction_name,
+              type,
+              id,
+            });
+            setShowEditTransactionModal(true);
+          }}
+        >
+          <MdOutlineModeEdit className="text-xl text-blue-400" />
+        </button>
+        <button
+          onClick={() => {
+            setAlertModal(true);
+            setDeleteTransactionId(id);
+          }}
+        >
+          <MdDeleteOutline className="text-xl text-red-400" />
+        </button>
+      </>
+    );
+  };
+
   return (
     <li
       className={`flex items-center gap-2 border-b-2 p-2 text-sm last:border-none`}
@@ -39,29 +69,7 @@ const TransactionItem = ({
             <span className="text-red-500">-${amount}</span>
           )}
         </p>
-        <button
-          onClick={() => {
-            setEditTransactionData({
-              category,
-              amount,
-              date,
-              name: transaction_name,
-              type,
-              id,
-            });
-            setShowEditTransactionModal(true);
-          }}
-        >
-          <MdOutlineModeEdit className="text-xl text-blue-400" />
-        </button>
-        <button
-          onClick={() => {
-            setAlertModal(true);
-            setDeleteTransactionId(id);
-          }}
-        >
-          <MdDeleteOutline className="text-xl text-red-400" />
-        </button>
+        {renderButtons()}
       </div>
     </li>
   );

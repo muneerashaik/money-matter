@@ -21,7 +21,7 @@ import TotalDebitCredit from "./TotalDebitCredit";
 const Dashboard = () => {
   const {
     latestTransactions,
-    transactionsLoading,
+    isTransactionsLoading,
     transactionsMutate,
     totalDebitCreditTransactionsMutate,
     deleteTransactionId,
@@ -98,39 +98,9 @@ const Dashboard = () => {
     }
   );
 
-  if (transactionsError) {
-    return <ErrorPage />;
-  }
-
-  return (
-    <div className="min-h-dh w-full p-4 bg-slate-100">
-      <TotalDebitCredit />
-      <h1
-        className="font-semibold mt-4"
-        style={{ color: "rgba(51, 59, 105, 1)" }}
-      >
-        Last Transactions
-      </h1>
-
-      {transactionsLoading ? (
-        <div className="flex items-center justify-center h-[60dvh]">
-          <Loader />
-        </div>
-      ) : (
-        <>
-          {transactionsLoading === false && latestTransactions?.length === 0 ? (
-            <EmptyView />
-          ) : (
-            <ul className="bg-white rounded-xl p-2 px-4 flex flex-col gap-2 mt-2">
-              {transactionsData.map((t) => t)}
-            </ul>
-          )}
-        </>
-      )}
-
-      {/* <ChartComponent /> */}
-
-      {alertModal && (
+  const renderAlertModal = () => {
+    if (alertModal) {
+      return (
         <ConfirmModal
           toggleModal={() => setAlertModal(false)}
           setActionId={setDeleteTransactionId}
@@ -138,9 +108,13 @@ const Dashboard = () => {
           action={"delete"}
           actionHandler={() => handleTransactionDelete()}
         />
-      )}
+      );
+    }
+  };
 
-      {showEditTransactionModal && (
+  const renderEditTransactionModal = () => {
+    if (showEditTransactionModal) {
+      return (
         <EditTransactionModal
           onClose={() => {
             setShowEditTransactionModal(false);
@@ -155,7 +129,46 @@ const Dashboard = () => {
           }}
           data={editTransactionData}
         />
+      );
+    }
+  };
+
+  if (transactionsError) {
+    return <ErrorPage />;
+  }
+
+  return (
+    <div className="min-h-dh w-full p-4 bg-slate-100">
+      <TotalDebitCredit />
+      <h1
+        className="font-semibold mt-4"
+        style={{ color: "rgba(51, 59, 105, 1)" }}
+      >
+        Last Transactions
+      </h1>
+
+      {isTransactionsLoading ? (
+        <div className="flex items-center justify-center h-[60dvh]">
+          <Loader />
+        </div>
+      ) : (
+        <>
+          {isTransactionsLoading === false &&
+          latestTransactions?.length === 0 ? (
+            <EmptyView />
+          ) : (
+            <ul className="bg-white rounded-xl p-2 px-4 flex flex-col gap-2 mt-2">
+              {transactionsData.map((t) => t)}
+            </ul>
+          )}
+        </>
       )}
+
+      {/* <ChartComponent /> */}
+
+      {renderAlertModal()}
+
+      {renderEditTransactionModal()}
     </div>
   );
 };

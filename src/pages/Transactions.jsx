@@ -22,7 +22,7 @@ const Transactions = () => {
   const {
     activeTab,
     transactions,
-    transactionsLoading,
+    isTransactionsLoading,
     transactionsMutate,
     totalDebitCreditTransactionsMutate,
     deleteTransactionId,
@@ -101,7 +101,7 @@ const Transactions = () => {
   const RenderTransactions = () => {
     return (
       <>
-        {transactionsLoading ? (
+        {isTransactionsLoading ? (
           <div className="flex items-center justify-center h-[60dvh]">
             <Loader />
           </div>
@@ -119,10 +119,6 @@ const Transactions = () => {
       </>
     );
   };
-
-  if (transactionsError) {
-    return <ErrorPage />;
-  }
 
   const renderConfirmModal = () => {
     if (alertModal) {
@@ -158,6 +154,10 @@ const Transactions = () => {
       );
     }
   };
+
+  if (transactionsError) {
+    return <ErrorPage />;
+  }
 
   return (
     <div className="min-h-dh w-full p-4 bg-slate-100">
