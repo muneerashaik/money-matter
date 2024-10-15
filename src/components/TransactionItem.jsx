@@ -45,15 +45,27 @@ const TransactionItem = ({
     );
   };
 
+  const renderTransactionAmount = () => {
+    if (type === "credit") {
+      return <span className="text-green-500">+${amount}</span>;
+    } else {
+      return <span className="text-red-500">-${amount}</span>;
+    }
+  };
+
+  const renderTransactionIcon = () => {
+    if (type === "credit") {
+      return <IoArrowUpCircleOutline className="text-xl text-green-500" />;
+    } else {
+      return <IoArrowDownCircleOutline className="text-xl text-red-500" />;
+    }
+  };
+
   return (
     <li
       className={`flex items-center gap-2 border-b-2 p-2 text-sm last:border-none`}
     >
-      {type === "credit" ? (
-        <IoArrowUpCircleOutline className="text-xl text-green-500" />
-      ) : (
-        <IoArrowDownCircleOutline className="text-xl text-red-500" />
-      )}
+      {renderTransactionIcon()}
       <p className="flex-grow">{transaction_name}</p>
       <div className="flex items-start justify-between gap-3 max-w-[500px] w-2/4">
         <p className="text-slate-400 w-1/4 first-letter:capitalize whitespace-normal">
@@ -62,13 +74,9 @@ const TransactionItem = ({
         <p className="text-slate-400 w-[30%]">
           {dayjs(date).format("DD MMM YY, hh:mm A")}
         </p>
-        <p className="font-semibold w-1/4">
-          {type === "credit" ? (
-            <span className="text-green-500">+${amount}</span>
-          ) : (
-            <span className="text-red-500">-${amount}</span>
-          )}
-        </p>
+
+        <p className="font-semibold w-1/4">{renderTransactionAmount()}</p>
+
         {renderButtons()}
       </div>
     </li>

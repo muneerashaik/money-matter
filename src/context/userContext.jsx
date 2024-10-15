@@ -19,13 +19,9 @@ export const UserContextProvider = ({ children }) => {
     }
   }, [userId]);
 
-  if (userId) {
-    return (
-      <UserContext.Provider value={{ userId, setUserId }}>
-        {children}
-      </UserContext.Provider>
-    );
-  } else {
-    return <></>;
-  }
+  return (
+    <UserContext.Provider value={{ userId, setUserId }}>
+      {children}
+    </UserContext.Provider>
+  );
 };

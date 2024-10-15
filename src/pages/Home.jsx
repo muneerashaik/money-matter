@@ -11,6 +11,9 @@ const Home = () => {
 
   useEffect(() => {
     navigate("/dashboard");
+    if (!localStorage.getItem(LOCALSTORAGE_KEY)) {
+      navigate("/login");
+    }
   }, []);
 
   if (localStorage.getItem(LOCALSTORAGE_KEY)) {

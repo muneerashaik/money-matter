@@ -100,6 +100,26 @@ const Login = ({ admin }) => {
     }
   };
 
+  const renderPasswordIcon = () => {
+    if (showPassword) {
+      return (
+        <AiOutlineEyeInvisible
+          onClick={() => setShowPassword(!showPassword)}
+          className="mr-2 cursor-pointer"
+          size={20}
+        />
+      );
+    } else {
+      return (
+        <AiOutlineEye
+          onClick={() => setShowPassword(!showPassword)}
+          className="mr-2 cursor-pointer"
+          size={20}
+        />
+      );
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center bg-white min-w-[300px] min-h-dvh">
       <form
@@ -157,19 +177,7 @@ const Login = ({ admin }) => {
             className="ml-2 border-none w-full h-full focus:outline-none"
             placeholder="Enter your Password"
           />
-          {showPassword ? (
-            <AiOutlineEyeInvisible
-              onClick={() => setShowPassword(!showPassword)}
-              className="mr-2 cursor-pointer"
-              size={20}
-            />
-          ) : (
-            <AiOutlineEye
-              onClick={() => setShowPassword(!showPassword)}
-              className="mr-2 cursor-pointer"
-              size={20}
-            />
-          )}
+          {renderPasswordIcon()}
         </div>
 
         <button

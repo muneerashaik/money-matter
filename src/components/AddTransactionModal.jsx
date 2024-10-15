@@ -18,7 +18,7 @@ import InputContainer, {
   InputElement,
   InputLabel,
   SelectInput,
-} from "./InputContainer";
+} from "./InputComponents";
 
 const AddTransactionModal = ({ onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
