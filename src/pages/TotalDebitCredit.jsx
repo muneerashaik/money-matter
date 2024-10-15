@@ -16,8 +16,8 @@ const TotalDebitCredit = () => {
     return <h1>Something went wrong !!!</h1>;
   }
 
-  const renderImage = () => {
-    if (total.type === TRANSACTION_TYPES_OBJECT.credit) {
+  const renderImage = (type) => {
+    if (type === TRANSACTION_TYPES_OBJECT.credit) {
       return <img className="h-24" src={creditImage} alt="credit" />;
     } else {
       return <img className="h-24" src={debitImage} alt="credit" />;
@@ -57,7 +57,7 @@ const TotalDebitCredit = () => {
                   </p>
                 </div>
 
-                {renderImage()}
+                {renderImage(total.type)}
               </div>
             );
           })}
